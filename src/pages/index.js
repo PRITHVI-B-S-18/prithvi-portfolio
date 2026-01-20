@@ -80,7 +80,7 @@ const Hero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
             >
-              <span className="text-[var(--text-primary)]">I'm </span>
+              <span className="text-[var(--text-primary)]">I&apos;m </span>
               <span className="text-gradient glow-text">Prithvi</span>
               <br />
               <span className="text-[var(--text-primary)]">B S</span>
@@ -137,7 +137,7 @@ const Hero = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  Let's Connect
+                  Let&apos;s Connect
                 </motion.button>
                 </Link>
             </motion.div>

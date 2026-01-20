@@ -71,7 +71,7 @@ const About = () => {
             
             <div className="space-y-4 text-[var(--text-secondary)] text-base sm:text-lg leading-relaxed">
               <p>
-                I'm <span className="text-primary font-semibold">Prithvi B S</span>, 
+                I&apos;m <span className="text-primary font-semibold">Prithvi B S</span>, 
                 an AI/Data Science student at <span className="text-[var(--text-primary)]">Bannari Amman Institute of Technology</span> and 
                 currently working as an <span className="text-secondary font-semibold">Associate Tech Content</span> at iamneo.
               </p>

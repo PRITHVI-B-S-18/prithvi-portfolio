@@ -125,10 +125,10 @@ const Contact = () => {
               Get in Touch
             </motion.span>
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold mb-4 sm:mb-6">
-              <span className="text-gradient">Let's Connect</span>
+              <span className="text-gradient">Let&apos;s Connect</span>
             </h1>
             <p className="text-lg sm:text-xl text-[var(--text-secondary)] max-w-2xl mx-auto">
-              Have a project in mind or want to collaborate? I'd love to hear from you!
+              Have a project in mind or want to collaborate? I&apos;d love to hear from you!
             </p>
           </motion.div>
 
@@ -151,10 +151,10 @@ const Contact = () => {
               whileHover={{ scale: 1.02 }}
             >
               <h2 className="text-2xl sm:text-3xl font-display font-bold text-[var(--text-primary)] mb-3 sm:mb-4">
-                Let's Build Something Amazing
+                Let&apos;s Build Something Amazing
               </h2>
               <p className="text-sm sm:text-base text-[var(--text-secondary)] mb-4 sm:mb-6 max-w-lg mx-auto">
-                I'm always open to discussing new projects, creative ideas, 
+                I&apos;m always open to discussing new projects, creative ideas, 
                 or opportunities to be part of your vision.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
