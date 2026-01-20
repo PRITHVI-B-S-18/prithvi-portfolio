@@ -6,10 +6,13 @@ const ParticleField = () => {
   const mouseRef = useRef({ x: 0, y: 0 });
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [isMounted, setIsMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Only render on client side to avoid hydration mismatch
   useEffect(() => {
     setIsMounted(true);
+    // Detect mobile devices
+    setIsMobile(window.innerWidth < 768);
   }, []);
 
   useEffect(() => {
@@ -153,8 +156,8 @@ const ParticleField = () => {
     };
   }, [dimensions, isMounted]);
 
-  // Don't render canvas on server side
-  if (!isMounted) {
+  // Don't render canvas on server side or mobile devices
+  if (!isMounted || isMobile) {
     return null;
   }
 

@@ -368,3 +368,39 @@ img, video {
     radial-gradient(at 80% 50%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
     radial-gradient(at 0% 100%, rgba(236, 72, 153, 0.08) 0px, transparent 50%);
 }
+
+/* ========================================
+   Mobile Performance Optimizations
+   ======================================== */
+@media (max-width: 768px) {
+  /* Reduce animation complexity on mobile */
+  * {
+    animation-duration: 0.3s !important;
+  }
+  
+  /* Simplify gradients on mobile */
+  .bg-mesh {
+    background: 
+      radial-gradient(at 50% 20%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+      radial-gradient(at 50% 80%, rgba(236, 72, 153, 0.08) 0px, transparent 50%);
+  }
+  
+  .light .bg-mesh {
+    background: 
+      radial-gradient(at 50% 20%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+      radial-gradient(at 50% 80%, rgba(236, 72, 153, 0.06) 0px, transparent 50%);
+  }
+  
+  /* Reduce blur effects on mobile */
+  .glass {
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+  }
+  
+  /* Disable hover effects on mobile */
+  .glow-text,
+  .btn-primary:hover,
+  .btn-secondary:hover {
+    filter: none;
+  }
+}

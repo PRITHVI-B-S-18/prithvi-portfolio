@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const shapes = [
@@ -20,6 +20,18 @@ const positions = [
 ];
 
 const FloatingShapes = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Detect mobile devices
+    setIsMobile(window.innerWidth < 768);
+  }, []);
+
+  // Don't render on mobile devices
+  if (isMobile) {
+    return null;
+  }
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {shapes.map((shape, index) => {
