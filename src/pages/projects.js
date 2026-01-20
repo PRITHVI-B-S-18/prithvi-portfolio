@@ -25,7 +25,7 @@ const projects = [
       { value: 'Real-time', label: 'Data Sync' },
       { value: 'Multi', label: 'Concurrent Sessions' },
     ],
-    status: 'Production',
+    status: 'In Use',
     color: 'from-blue-500 to-cyan-500',
   },
   {
