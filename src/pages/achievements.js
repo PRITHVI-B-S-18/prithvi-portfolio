@@ -21,9 +21,9 @@ const achievements = [
     particles: ['🎉', '🏅', '🎊'],
   },
   {
-    title: '3 Production Systems',
+    title: '8 Production Systems',
     subtitle: 'Actively Deployed',
-    description: 'Architected and deployed 3 production-ready systems that are actively used by teams daily.',
+    description: 'Architected and deployed 8 production-ready systems that are actively used by teams daily.',
     icon: '🚀',
     color: 'from-blue-400 to-cyan-500',
     particles: ['💻', '⚡', '🔥'],

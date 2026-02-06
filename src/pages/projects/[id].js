@@ -157,6 +157,90 @@ The Streamlit interface provides both text and voice interaction modes, allowing
     status: 'Completed',
     color: 'from-indigo-500 to-violet-500',
   },
+  'lxd-analytics': {
+    title: 'LXD Analytics',
+    subtitle: 'Training & Operations Analytics Dashboard',
+    description: 'A full-stack training and operations analytics dashboard that turns Excel-based training data into live dashboards, utilization analytics, and trainer management—with optional real-time sync from SharePoint/Excel Online.',
+    image: '/images/projects/lxd-analytics.png',
+    longDescription: `LXD Analytics replaces manual Excel reporting with a web app that connects to a master Excel sheet (upload or SharePoint/Excel Online via Microsoft Graph API), transforms wide-format allotment data into a long-format datapoint model, and enriches records with trainer info.
+
+The app exposes dashboards, tables, filters, and charts (pie, bar, line) for programs, clients, dates, and trainers. Built for multi-hub use (Training, Delivery, Ops); the Training Hub is fully implemented with Dashboard, Pending Allotments, Utilization (by Program/Client/Date/Trainer), Programs, Trainers, Trainer Calendar, and Data Explorer. Formula parity with existing Excel logic is maintained in Python on the backend.`,
+    features: [
+      'SharePoint/Excel Online sync via Microsoft Graph API',
+      'Wide-to-long data transformation with formula parity',
+      'Training Hub: Dashboard, Pending Allotments, Utilization (Program/Client/Date/Trainer)',
+      'Programs, Trainers, Trainer Calendar, Data Explorer',
+      'Recharts visualizations (pie, bar, line) and TanStack Table',
+      'Multi-hub structure (Training, Delivery, Ops)',
+      'FastAPI backend with optional auto-refresh',
+      'Deployed on Render (backend Web Service + frontend Static Site)',
+    ],
+    tech: ['React 18', 'TypeScript', 'Vite', 'FastAPI', 'Recharts', 'TanStack Table', 'Microsoft Graph', 'Pandas', 'Render'],
+    metrics: [
+      { value: 'Real-time', label: 'SharePoint Sync' },
+      { value: 'Multi-hub', label: 'Architecture' },
+      { value: 'Live', label: 'Dashboards' },
+      { value: 'Formula', label: 'Parity' },
+    ],
+    status: 'In Use',
+    color: 'from-teal-500 to-emerald-500',
+  },
+  'software-license-manager': {
+    title: 'Software License Manager',
+    subtitle: 'Employee & License Management',
+    description: 'A full-stack web application for managing software licenses across employees. Admins maintain employees and applications, assign licenses in bulk, export reports, and track all changes in an activity log—with real-time data and a modern, accessible UI.',
+    image: '/images/projects/software-license-manager.png',
+    longDescription: `Software License Manager helps organizations track which employees have access to which software applications. It supports Paid and Non-Paid application categories, department-based structure, bulk operations, and export to Excel/CSV.
+
+Features include employee management (CRUD, department tree, bulk import/edit/delete), application management with category tabs and assignment counts, license mapping with real-time selectors, and flexible export (all, by department, by application, by manager, with column customization). The activity log provides an audit trail with filters and CSV export. Built with React 19, TypeScript, Vite, Firebase (Auth + Firestore), and a custom pastel theme.`,
+    features: [
+      'Employee & application management with Paid/Non-Paid categories',
+      'Department tree, bulk import/edit/delete, assignment checks',
+      'License mapping with real-time ApplicationSelector and EmployeeSelector',
+      'Export to Excel/CSV with scope and column customization',
+      'Activity log: filter by action, entity, user, date; export to CSV',
+      'Dashboard with summary cards and optional sample data seed',
+      'Firebase Auth + Firestore, session timeout, error boundary',
+      'Accessible modals, aria-labels, Tailwind pastel theme',
+    ],
+    tech: ['React 19', 'TypeScript', 'Vite 7', 'Firebase', 'Firestore', 'Tailwind CSS', 'SheetJS', 'React Router 7'],
+    metrics: [
+      { value: 'Real-time', label: 'Firestore Sync' },
+      { value: 'Bulk', label: 'Assign & Export' },
+      { value: 'Audit', label: 'Activity Log' },
+      { value: 'Accessible', label: 'UI' },
+    ],
+    status: 'In Use',
+    color: 'from-rose-500 to-pink-500',
+  },
+  'asset-manager': {
+    title: 'Asset Manager',
+    subtitle: 'Asset & Policy Management',
+    description: 'A full-stack asset and policy management web application for organizations to track employees, licenses, laptops, monitors, and company policies. Built with React 19, TypeScript, Firebase (Auth + Firestore), and Supabase Storage, with role-based access and a modern UI.',
+    image: '/images/projects/asset-manager.png',
+    longDescription: `Asset Manager provides 12 built-in sections (e.g. All Emp, All Laptop, All Monitors, MAC address, DL Groups) plus custom sections defined in Settings. Each section has its own Firestore collection with real-time listeners, optional paginated loading, CRUD, bulk edit, search, filter, sort, and column visibility stored in localStorage.
+
+Policies live in Supabase Storage: create folders, upload PDFs, view or direct-download, delete (admin). Role-based access (Admin vs Viewer) is enforced via Firestore and UI. The app supports CSV/Excel import with preview and column mapping, multiple date formats, and an error boundary for resilience.`,
+    features: [
+      'Role-based access (Admin/Viewer) with Firebase Auth',
+      '12 built-in sections + custom sections with column config in Settings',
+      'CRUD, bulk edit, search, filter, sort; column visibility per section',
+      'CSV/Excel import with preview and column mapping; export per section',
+      'Policy PDFs in Supabase Storage: folders, upload, view, direct download',
+      'Paginated Firestore reads and TanStack Virtual for large lists',
+      'Manage Users (admin): list users, change role (viewer ↔ admin)',
+      'TypeScript strict mode, toasts, confirm dialogs, error boundary',
+    ],
+    tech: ['React 19', 'TypeScript', 'Vite 7', 'Firebase', 'Firestore', 'Supabase Storage', 'SheetJS', 'React Router 7'],
+    metrics: [
+      { value: 'Dual', label: 'Firebase + Supabase' },
+      { value: 'Real-time', label: 'Firestore' },
+      { value: 'Role-based', label: 'Access' },
+      { value: '12+', label: 'Sections' },
+    ],
+    status: 'In Use',
+    color: 'from-sky-500 to-blue-500',
+  },
 };
 
 const ProjectDetail = () => {
@@ -308,18 +392,18 @@ const ProjectDetail = () => {
             className="mb-8 sm:mb-12"
           >
             <h2 className="text-xl sm:text-2xl font-display font-bold text-[var(--text-primary)] mb-4 sm:mb-6">Key Features</h2>
-            <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {project.features.map((feature, i) => (
                 <motion.div
                   key={i}
-                  className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg sm:rounded-xl glass"
+                  className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg sm:rounded-xl glass min-w-0"
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.05 }}
                 >
-                  <span className="text-accent text-sm sm:text-base">✓</span>
-                  <span className="text-xs sm:text-sm text-[var(--text-secondary)]">{feature}</span>
+                  <span className="text-accent text-sm sm:text-base shrink-0">✓</span>
+                  <span className="text-xs sm:text-sm text-[var(--text-secondary)] break-words">{feature}</span>
                 </motion.div>
               ))}
             </div>
@@ -332,7 +416,7 @@ const ProjectDetail = () => {
             transition={{ delay: 0.6 }}
           >
             <h2 className="text-xl sm:text-2xl font-display font-bold text-[var(--text-primary)] mb-4 sm:mb-6">Tech Stack</h2>
-            <div className="flex flex-wrap gap-2 sm:gap-3">
+            <div className="flex flex-wrap gap-2 sm:gap-3 min-w-0">
               {project.tech.map((tech, i) => (
                 <motion.span
                   key={tech}

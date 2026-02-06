@@ -6,7 +6,7 @@ import PageLayout from '@/components/Layout/PageLayout';
 import AnimatedCounter from '@/components/UI/AnimatedCounter';
 
 const stats = [
-  { value: 3, label: 'Production Systems', icon: '🚀', suffix: '' },
+  { value: 8, label: 'Production Systems', icon: '🚀', suffix: '' },
   { value: 70, label: 'Time Reduction', icon: '⏱️', suffix: '%' },
   { value: 40, label: 'Efficiency Gain', icon: '📈', suffix: '%' },
   { value: 2, label: 'Employee of Month', icon: '🏆', suffix: '×' },

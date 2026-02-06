@@ -14,7 +14,7 @@ const experiences = [
     description: 'Leading development of AI-powered educational tools and enterprise systems.',
     achievements: [
       'Leading development of AI-powered educational tools',
-      'Architected 3 production-ready systems actively used by teams',
+      'Architected 8 production-ready systems actively used by teams',
       '40% improvement in operational efficiency',
       'Building full-stack enterprise applications with React, FastAPI, Azure OpenAI',
     ],

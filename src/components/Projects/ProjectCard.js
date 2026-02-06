@@ -55,7 +55,7 @@ const ProjectCard = ({ project, index, isHovered, onHover, onLeave }) => {
 
       {/* Card */}
       <motion.div
-        className="relative h-full rounded-3xl glass border border-[var(--border)] overflow-hidden"
+        className="relative h-full rounded-3xl glass border border-[var(--border)] overflow-hidden flex flex-col"
         style={{
           rotateX,
           rotateY,
@@ -63,7 +63,7 @@ const ProjectCard = ({ project, index, isHovered, onHover, onLeave }) => {
         }}
       >
         {/* Image */}
-        <div className="relative h-48 overflow-hidden">
+        <div className="relative h-40 sm:h-48 shrink-0 overflow-hidden">
           <Image
             src={project.image}
             alt={project.title}
@@ -87,34 +87,34 @@ const ProjectCard = ({ project, index, isHovered, onHover, onLeave }) => {
         </div>
 
         {/* Content */}
-        <div className="p-6" style={{ transform: 'translateZ(30px)' }}>
-          <h3 className="text-xl font-display font-bold text-[var(--text-primary)] mb-1">
+        <div className="p-4 sm:p-6 flex flex-1 flex-col min-h-0 min-w-0" style={{ transform: 'translateZ(30px)' }}>
+          <h3 className="text-lg sm:text-xl font-display font-bold text-[var(--text-primary)] mb-1">
             {project.title}
           </h3>
-          <p className="text-primary text-sm font-medium mb-3">{project.subtitle}</p>
-          <p className="text-[var(--text-secondary)] text-sm mb-4 line-clamp-2">
+          <p className="text-primary text-xs sm:text-sm font-medium mb-2 sm:mb-3">{project.subtitle}</p>
+          <p className="text-[var(--text-secondary)] text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2 break-words">
             {project.description}
           </p>
 
           {/* Features */}
-          <ul className="space-y-2 mb-4">
+          <ul className="space-y-1.5 sm:space-y-2 mb-3 sm:mb-4">
             {project.features.slice(0, 3).map((feature, i) => (
               <motion.li
                 key={i}
-                className="flex items-start gap-2 text-sm"
+                className="flex items-start gap-2 text-xs sm:text-sm min-w-0"
                 initial={{ opacity: 0, x: -10 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 + 0.4 + i * 0.1 }}
               >
-                <span className="text-accent mt-0.5">✓</span>
-                <span className="text-[var(--text-secondary)]">{feature}</span>
+                <span className="text-accent mt-0.5 shrink-0">✓</span>
+                <span className="text-[var(--text-secondary)] break-words">{feature}</span>
               </motion.li>
             ))}
           </ul>
 
           {/* Metrics */}
-          <div className="grid grid-cols-3 gap-2 mb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 sm:gap-2 mb-3 sm:mb-4">
             {project.metrics.map((metric, i) => (
               <motion.div
                 key={i}
@@ -131,11 +131,11 @@ const ProjectCard = ({ project, index, isHovered, onHover, onLeave }) => {
           </div>
 
           {/* Tech Stack */}
-          <div className="flex flex-wrap gap-1.5 mb-4">
+          <div className="flex flex-wrap gap-1 sm:gap-1.5 mb-3 sm:mb-4">
             {project.tech.slice(0, 4).map((tech, i) => (
               <motion.span
                 key={tech}
-                className="px-2 py-1 rounded-full text-[10px] glass text-[var(--text-secondary)]"
+                className="px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-[10px] glass text-[var(--text-secondary)]"
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
@@ -145,14 +145,14 @@ const ProjectCard = ({ project, index, isHovered, onHover, onLeave }) => {
               </motion.span>
             ))}
             {project.tech.length > 4 && (
-              <span className="px-2 py-1 rounded-full text-[10px] glass text-[var(--text-secondary)]">
+              <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-[10px] glass text-[var(--text-secondary)]">
                 +{project.tech.length - 4}
               </span>
             )}
           </div>
 
-          {/* Action Button */}
-          <Link href={`/projects/${project.id}`}>
+          {/* Action Button - mt-auto keeps it aligned at bottom across all cards */}
+          <Link href={`/projects/${project.id}`} className="mt-auto block">
             <motion.button
               className={`w-full py-3 rounded-xl text-sm font-medium text-white bg-gradient-to-r ${project.color} relative overflow-hidden group/btn`}
               whileHover={{ scale: 1.02 }}
