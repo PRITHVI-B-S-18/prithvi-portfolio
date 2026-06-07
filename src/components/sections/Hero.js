@@ -19,22 +19,18 @@ export default function Hero() {
         };
 
   return (
-    <section id="top" className="relative overflow-hidden">
-      {/* Ambient aurora glows (slow drift) */}
-      <motion.div
+    <section id="top" className="relative overflow-hidden scroll-mt-24">
+      {/* Ambient glows (static) */}
+      <div
         className="pointer-events-none absolute -right-32 -top-40 h-[34rem] w-[34rem] glow blur-3xl"
-        animate={reduce ? undefined : { x: [0, 40, 0], y: [0, 30, 0] }}
-        transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
         aria-hidden="true"
       />
-      <motion.div
+      <div
         className="pointer-events-none absolute -left-40 top-40 h-[26rem] w-[26rem] glow-2 blur-3xl"
-        animate={reduce ? undefined : { x: [0, -30, 0], y: [0, 40, 0] }}
-        transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
         aria-hidden="true"
       />
 
-      <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 pb-16 pt-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:pt-16">
+      <div className="mx-auto grid max-w-6xl grid-cols-1 items-start gap-12 px-6 pb-16 pt-16 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16 lg:pt-8"> 
         {/* Left: text */}
         <div className="order-2 lg:order-1">
           <motion.div {...rise(0)} className="flex items-center gap-3">
@@ -93,7 +89,7 @@ export default function Hero() {
         {/* Right: portrait */}
         <motion.div className="order-1 flex justify-center lg:order-2 lg:justify-end" {...rise(0.12)}>
           <div className="relative w-full max-w-[300px] sm:max-w-[340px] lg:max-w-[380px]">
-            <div className="absolute -inset-3 -z-10 rounded-3xl bg-grad opacity-30 blur-2xl" aria-hidden="true" />
+            <div className="absolute -inset-2 -z-10 rounded-3xl bg-grad opacity-[0.18] blur-2xl" aria-hidden="true" />
             <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-2xl">
               <Image src={portrait} alt={name} width={1122} height={1402} priority className="h-auto w-full object-cover" />
             </div>
