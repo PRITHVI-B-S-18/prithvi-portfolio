@@ -59,7 +59,7 @@ export default function Experience() {
                     <li key={j} className="flex items-baseline gap-2.5 text-sm leading-relaxed">
                       <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent" />
                       <span className="text-muted">
-                        <span className="text-faint">{h.tag}. </span>
+                        <span className="text-faint">{h.tag}: </span>
                         {h.text}
                       </span>
                     </li>

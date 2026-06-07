@@ -2,8 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Dark-only editorial-tech palette. RGB channels so Tailwind alpha modifiers work. */
+/* Editorial-tech palette. RGB channels so Tailwind alpha modifiers work.
+   :root = light theme (default), .dark = dark theme. Toggle adds/removes
+   the .dark class on <html>. */
 :root {
+  color-scheme: light;
+  --bg: 235 237 242;
+  --surface: 255 255 255;
+  --surface-2: 245 246 250;
+  --ink: 23 24 33;
+  --muted: 80 84 99;
+  --faint: 128 132 147;
+  --line: 209 213 224;
+  --accent: 79 70 229;
+  --accent-2: 37 99 235;
+}
+
+.dark {
   color-scheme: dark;
   --bg: 9 9 13;
   --surface: 17 17 23;
@@ -14,6 +29,11 @@
   --line: 38 38 48;
   --accent: 130 110 255;
   --accent-2: 88 150 255;
+}
+
+/* Light theme: lift surface cards off the gray canvas for definition */
+:root:not(.dark) .bg-surface {
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.05), 0 4px 10px rgb(15 23 42 / 0.04);
 }
 
 html {
@@ -41,6 +61,16 @@ body::after {
   opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 200px 200px;
+}
+
+/* Smooth color crossfade only while toggling themes (class added briefly by
+   the toggle, then removed so it never slows hover/normal transitions). */
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease,
+    fill 0.4s ease, stroke 0.4s ease !important;
 }
 
 ::selection {
@@ -92,4 +122,10 @@ body::after {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   body::after { display: none; }
+  .theme-transition,
+  .theme-transition *,
+  .theme-transition *::before,
+  .theme-transition *::after {
+    transition: none !important;
+  }
 }
