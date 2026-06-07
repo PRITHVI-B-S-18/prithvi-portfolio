@@ -12,18 +12,19 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Prithvi B S — Software Engineer</title>
+        <title>Prithvi B S | Software Engineer</title>
         <meta
           name="description"
-          content="Prithvi B S — Software Engineer building secure systems. Currently on the Neo Browser team at iamneo."
+          content="Prithvi B S, Software Engineer building secure, cross-platform systems. Currently on the Neo Browser team at iamneo."
         />
-        <meta property="og:title" content="Prithvi B S — Software Engineer" />
+        <meta property="og:title" content="Prithvi B S | Software Engineer" />
         <meta
           property="og:description"
-          content="Software Engineer building secure systems. Neo Browser team at iamneo."
+          content="Software Engineer building secure, cross-platform systems. Neo Browser team at iamneo."
         />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="/images/profile/portrait-1.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <SiteNav />
       <main>

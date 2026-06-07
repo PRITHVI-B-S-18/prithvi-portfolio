@@ -23,12 +23,14 @@ the owner's `~/Documents` folder and corroborated by the FY26 performance review
   opposite of the copied dark/neon/glass look).
 - Feature the **current Software Engineer role** (iamneo · Neo Browser team) prominently.
 - Describe each project with **accurate, verified tech stacks** (no invented details).
-- Keep the **same stack**: Next.js + Tailwind CSS + static export → Firebase Hosting.
+- Keep the **same app stack**: Next.js + Tailwind CSS + static export. Deploy to
+  **Cloudflare Pages** (Firebase is removed).
 - Fix the old codebase's structural problems (duplicated project data across files).
 
 ## 3. Non-Goals
 
-- No new framework or hosting change (staying on Next.js + Tailwind + Firebase).
+- No new framework (staying on Next.js + Tailwind). Hosting moves off Firebase to
+  Cloudflare Pages; the static-export build is host-agnostic and unchanged.
 - No CMS or backend; content stays in-repo as static data.
 - No attempt at front-end "code protection"/obfuscation (ineffective for a static site;
   distinctiveness + clear authorship is the real protection).
@@ -37,12 +39,14 @@ the owner's `~/Documents` folder and corroborated by the FY26 performance review
 
 | Decision | Choice |
 |---|---|
-| Redesign scope | Full rebuild, same stack (Next.js + Tailwind + Firebase) |
+| Redesign scope | Full rebuild, same app stack (Next.js + Tailwind), static export |
+| Hosting | **Cloudflare Pages** (Firebase removed) |
 | Visual direction | Minimalist editorial |
 | Architecture | Single-page scroll + per-project detail pages |
 | Current job title | **Software Engineer** · iamneo · Neo Browser team |
 | Theme | **Light-first** (paper aesthetic) with dark-mode toggle |
 | Accent color | Vermilion / signal-orange (single accent; swappable) |
+| Portrait | Provided studio headshot (dark, blue-rim-lit) used as a framed block; default `portrait-1`, `portrait-2` available |
 
 ### Confidentiality guardrails (PUBLIC site)
 
@@ -69,6 +73,11 @@ the owner's `~/Documents` folder and corroborated by the FY26 performance review
   generous margins, asymmetric composition.
 - **Motion:** restrained scroll-triggered text reveals only (Framer Motion). No gradient
   orbs, particle fields, or custom cursor. Honors `prefers-reduced-motion`.
+- **Portrait:** the provided studio headshot (dark background, blue rim light) is used as a
+  deliberate dark, framed block in the Hero — a high-contrast focal point on the paper
+  layout. The blue lighting reads as complementary to the vermilion accent. Stored in
+  `public/images/profile/` and web-optimized (resized + compressed); referenced by path from
+  `content/profile.js` so it is one-line swappable between `portrait-1` and `portrait-2`.
 - **Accessibility:** WCAG-AA contrast, keyboard-navigable, semantic landmarks, focus-visible
   states, reduced-motion fallback.
 
@@ -78,7 +87,8 @@ Single long-scroll home page with a sticky minimal nav, plus dedicated project d
 
 ```
 /                         one long scroll
-  01 Hero          name (large), positioning line, current-role line, primary links
+  01 Hero          name (large), positioning line, current-role line, primary links,
+                   framed dark portrait (right column on desktop, stacked on mobile)
   02 About         short bio + 4-stage career arc (generic phrasing), tech summary
   03 Experience    iamneo timeline; current Software Engineer / Neo Browser featured
   04 Selected Work curated project grid -> detail pages
@@ -95,7 +105,8 @@ in hero and contact.
 A single source of truth under `src/content/` (TypeScript/JS data modules) consumed by both
 the home sections and the detail pages — eliminating the old duplication.
 
-- `content/profile.js` — name, positioning line, current role, links, résumé path.
+- `content/profile.js` — name, positioning line, current role, links, résumé path, and
+  `portrait` image path (default `/images/profile/portrait-1.png`).
 - `content/experience.js` — iamneo timeline entries (role, org, dates, high-level
   highlights). Current entry: **Software Engineer · iamneo · Neo Browser team · Feb 2026 –
   Present** (start month from Linear: account created 2026-02-13, first started ticket
@@ -143,8 +154,11 @@ Firebase · Radix), **Email Signature Generator** (React · Vite · html-to-imag
 
 ## 8. Technical Architecture
 
-- **Framework:** Next.js (latest), `output: 'export'` static build → Firebase Hosting
-  (deploy flow unchanged: `npm run build && firebase deploy --only hosting`).
+- **Framework:** Next.js 14, `output: 'export'` static build to `out/`.
+- **Deployment:** Cloudflare Pages via GitHub Git integration — build command `npm run
+  build`, output directory `out`, Node 20 (`.nvmrc`). Firebase removed (`firebase.json`,
+  `.firebaserc`, `.firebase/` deleted; `firebase-tools` dep dropped). Optional `public/_headers`
+  for caching/security headers.
 - **Routing:** Pages Router retained for simple static export. Home is a single page
   composed of section components; `/work/[slug]` uses `getStaticPaths` over
   `content/projects.js` (fixes the old client-only dynamic route).
@@ -156,7 +170,8 @@ Firebase · Radix), **Email Signature Generator** (React · Vite · html-to-imag
   - `sections/` — `Hero`, `About`, `Experience`, `Work`, `Skills`, `Contact`
   - `work/` — `ProjectCard`, `ProjectDetail`
   - `ui/` — `Reveal` (scroll animation), `Tag`, `ThemeToggle`, `Monogram`
-- **Reused assets:** existing profile image, BSP monogram/logo, `Resume.pdf`.
+- **Assets:** new provided portrait (`public/images/profile/portrait-1.png` /
+  `portrait-2.png`, optimized at build-prep time), existing `Resume.pdf`, `favicon.svg`.
 - **Images:** `next/image` with `unoptimized: true` (required for static export).
 
 ## 9. Authorship / Anti-Copy Measures
@@ -166,7 +181,8 @@ Protection comes from distinctiveness + provenance:
 
 - Footer credit ("Designed & built by Prithvi B S") and monogram.
 - `LICENSE` file (all rights reserved) + copyright meta.
-- Optional: keep source repo private, publish only the built `out/`.
+- Recommended: keep the GitHub source repo **private** — Cloudflare Pages can build from a
+  private repo, so only the deployed static site is public.
 
 ## 10. Out of Scope
 

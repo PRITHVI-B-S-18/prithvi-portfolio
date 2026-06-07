@@ -2,11 +2,11 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Rebuild the portfolio as a minimalist, editorial, single-scroll site on the same stack (Next.js + Tailwind + Firebase static hosting), featuring the current Software Engineer role and verified project work.
+**Goal:** Rebuild the portfolio as a minimalist, editorial, single-scroll site on the same app stack (Next.js + Tailwind, static export), deployed to Cloudflare Pages, featuring the current Software Engineer role, a provided studio portrait, and verified project work.
 
 **Architecture:** Next.js (Pages Router, `output: 'export'`) single-page home composed of section components, plus static `/work/[slug]` project detail pages generated from a single content data source. Light-first "paper" theme with a dark-mode toggle (`next-themes`). All copy lives in `src/content/*` data modules so home sections and detail pages share one source of truth.
 
-**Tech Stack:** Next.js 14, React 18, Tailwind CSS 3, Framer Motion 11, next-themes, `next/font` (Fraunces via Google; Geist + Geist Mono via the `geist` package). Static export → Firebase Hosting.
+**Tech Stack:** Next.js 14, React 18, Tailwind CSS 3, Framer Motion 11, next-themes, `next/font` (Fraunces via Google; Geist + Geist Mono via the `geist` package). Static export → Cloudflare Pages.
 
 **Testing approach (read before starting):** This is a static, design-led front end with no existing test runner. Adding a unit-test harness here is over-engineering (YAGNI). The **integration test is the static build**: `npm run build` evaluates every content module and runs `getStaticPaths`, so a broken content shape or slug fails the build loudly. A build-time integrity guard in `content/projects.js` (unique slugs) backs this up. Per-task verification is therefore: `npm run lint` + `npm run build` succeed, and the dev server (`npm run dev`) renders the affected section. Treat "verify" steps as running those commands and confirming the stated expected output.
 
@@ -20,7 +20,7 @@ package.json                 MODIFY  deps + scripts
 tailwind.config.js           REPLACE design tokens (colors, fonts, type scale)
 postcss.config.js            KEEP
 src/styles/globals.css       REPLACE token definitions + base styles (no glassmorphism)
-src/content/profile.js       CREATE  name, positioning, links, bio, education
+src/content/profile.js       CREATE  name, positioning, links, bio, education, portrait path
 src/content/experience.js    CREATE  iamneo timeline (current SWE role first)
 src/content/projects.js      CREATE  single source of truth for projects + detail content
 src/content/skills.js        CREATE  grouped skills
@@ -45,10 +45,14 @@ src/components/ui/Tag.js             CREATE  mono tech chip
 src/components/ui/ThemeToggle.js     CREATE
 src/components/ui/Monogram.js        CREATE
 LICENSE                      CREATE  all-rights-reserved notice
+.nvmrc                       CREATE  Node 20 for Cloudflare Pages builds
+public/_headers              CREATE  Cloudflare caching + security headers
+public/images/profile/portrait-1.jpg  CREATE  optimized portrait (from provided image; PNGs converted)
 
 # DELETED (old structure):
 src/pages/about.js, achievements.js, contact.js, experience.js, projects.js, projects/[id].js, skills.js
 src/components/Layout/*, Effects/*, Projects/*, UI/*, hooks/*
+firebase.json, .firebaserc, .firebase/   (Firebase hosting removed)
 ```
 
 `jsconfig.json` already maps `@/*` → `src/*`; keep it.
@@ -72,8 +76,7 @@ src/components/Layout/*, Effects/*, Projects/*, UI/*, hooks/*
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "deploy": "next build && firebase deploy --only hosting"
+    "lint": "next lint"
   },
   "dependencies": {
     "framer-motion": "^11.3.0",
@@ -87,14 +90,13 @@ src/components/Layout/*, Effects/*, Projects/*, UI/*, hooks/*
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.5",
-    "firebase-tools": "^15.3.1",
     "postcss": "^8.4.39",
     "tailwindcss": "^3.4.6"
   }
 }
 ```
 
-Note: `next export` is removed in Next 14; with `output: 'export'`, `next build` writes the static site to `out/`. `sass`, `sass-loader`, and `webpack` are dropped (unused).
+Note: `next export` is removed in Next 14; with `output: 'export'`, `next build` writes the static site to `out/`. `sass`, `sass-loader`, `webpack`, and `firebase-tools` are dropped (unused); there is no local `deploy` script — Cloudflare Pages builds on push (Task 1B).
 
 - [ ] **Step 2: Replace `next.config.js`**
 
@@ -120,6 +122,67 @@ Expected: installs without peer-dependency errors; `node_modules/geist` and `nod
 ```bash
 git add package.json package-lock.json next.config.js
 git commit -m "chore: update deps and static-export build config for rebuild"
+```
+
+---
+
+## Task 1B: Remove Firebase, add Cloudflare Pages config, optimize portrait
+
+**Files:**
+- Delete: `firebase.json`, `.firebaserc` (if present), `.firebase/` directory
+- Create: `.nvmrc`
+- Create: `public/_headers`
+- Optimize: `public/images/profile/portrait-1.png` / `portrait-2.png` → `.jpg` (PNGs already copied into the repo)
+
+- [ ] **Step 1: Remove Firebase artifacts**
+
+Run:
+```bash
+git rm -f firebase.json
+git rm -f .firebaserc 2>/dev/null || true
+git rm -r -f .firebase 2>/dev/null || true
+rm -rf .firebase
+```
+Expected: Firebase config and hosting cache removed from the repo.
+
+- [ ] **Step 2: Pin Node version for Cloudflare (`.nvmrc`)**
+
+```
+20
+```
+
+- [ ] **Step 3: Create `public/_headers` (caching + basic security headers)**
+
+```
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/images/*
+  Cache-Control: public, max-age=86400
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+```
+
+- [ ] **Step 4: Optimize the provided portraits to web-sized JPEG**
+
+The source PNGs (~1.7–2 MB each) are too heavy for a hero image. Convert to JPEG (max ~1100 px, quality ~82) with macOS `sips`, then drop the PNGs:
+```bash
+cd public/images/profile
+sips -s format jpeg -s formatOptions 82 -Z 1100 portrait-1.png --out portrait-1.jpg
+sips -s format jpeg -s formatOptions 82 -Z 1100 portrait-2.png --out portrait-2.jpg
+rm portrait-1.png portrait-2.png
+cd -
+ls -la public/images/profile/portrait-*.jpg
+```
+Expected: two `.jpg` files, each well under ~300 KB, aspect preserved (~880×1100). If `sips` is unavailable, produce equivalently sized JPEGs at the same paths with any tool.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add -A
+git commit -m "chore: drop Firebase, add Cloudflare Pages config, optimize portrait"
 ```
 
 ---
@@ -232,6 +295,7 @@ export const profile = {
   },
   location: 'India',
   resume: '/Resume.pdf',
+  portrait: '/images/profile/portrait-1.jpg',
   links: {
     email: 'prithvikrishna1803@gmail.com',
     github: 'https://github.com/PRITHVI-B-S-18',
@@ -765,41 +829,67 @@ git commit -m "feat: layout components (Section, SiteNav, Footer)"
 - [ ] **Step 1: Create `src/components/sections/Hero.js`**
 
 ```jsx
+import Image from 'next/image';
 import { profile } from '@/content/profile';
 import Reveal from '@/components/ui/Reveal';
 
 const linkClass = 'text-ink underline-offset-4 transition-colors hover:text-accent hover:underline';
 
 export default function Hero() {
-  const { name, positioning, currentRole, links, resume } = profile;
+  const { name, positioning, currentRole, links, resume, portrait } = profile;
   return (
-    <section className="mx-auto flex min-h-[88vh] max-w-5xl flex-col justify-center px-6 py-24">
-      <Reveal>
-        <p className="font-mono text-sm text-accent">{currentRole.title}</p>
-      </Reveal>
-      <Reveal delay={0.05}>
-        <h1 className="mt-4 font-serif text-5xl leading-[1.05] text-ink sm:text-7xl">{name}</h1>
-      </Reveal>
-      <Reveal delay={0.1}>
-        <p className="mt-6 max-w-xl font-serif text-2xl text-muted sm:text-3xl">{positioning}</p>
-      </Reveal>
-      <Reveal delay={0.15}>
-        <p className="mt-8 font-mono text-sm text-muted">
-          Currently {currentRole.title} &middot; {currentRole.org} &middot; {currentRole.team}
-        </p>
-      </Reveal>
-      <Reveal delay={0.2}>
-        <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 font-mono text-sm">
-          <a className={linkClass} href={`mailto:${links.email}`}>Email</a>
-          <a className={linkClass} href={links.github} target="_blank" rel="noopener noreferrer">GitHub</a>
-          <a className={linkClass} href={links.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
-          <a className={linkClass} href={resume} target="_blank" rel="noopener noreferrer">R&eacute;sum&eacute;</a>
+    <section className="mx-auto grid min-h-[88vh] max-w-5xl grid-cols-1 items-center gap-10 px-6 py-24 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
+      <div className="order-2 lg:order-1">
+        <Reveal>
+          <p className="font-mono text-sm text-accent">{currentRole.title}</p>
+        </Reveal>
+        <Reveal delay={0.05}>
+          <h1 className="mt-4 font-serif text-5xl leading-[1.05] text-ink sm:text-6xl xl:text-7xl">
+            {name}
+          </h1>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <p className="mt-6 max-w-xl font-serif text-2xl text-muted sm:text-3xl">{positioning}</p>
+        </Reveal>
+        <Reveal delay={0.15}>
+          <p className="mt-8 font-mono text-sm text-muted">
+            Currently {currentRole.title} &middot; {currentRole.org} &middot; {currentRole.team}
+          </p>
+        </Reveal>
+        <Reveal delay={0.2}>
+          <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 font-mono text-sm">
+            <a className={linkClass} href={`mailto:${links.email}`}>Email</a>
+            <a className={linkClass} href={links.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a className={linkClass} href={links.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a className={linkClass} href={resume} target="_blank" rel="noopener noreferrer">R&eacute;sum&eacute;</a>
+          </div>
+        </Reveal>
+      </div>
+
+      <Reveal delay={0.1} className="order-1 lg:order-2">
+        <div className="relative mx-auto w-full max-w-xs lg:max-w-sm">
+          <span
+            className="absolute -bottom-3 -right-3 -z-10 h-full w-full rounded-lg bg-accent/15"
+            aria-hidden="true"
+          />
+          <div className="overflow-hidden rounded-lg border border-line">
+            <Image
+              src={portrait}
+              alt={name}
+              width={1122}
+              height={1402}
+              priority
+              className="h-auto w-full"
+            />
+          </div>
         </div>
       </Reveal>
     </section>
   );
 }
 ```
+
+The portrait sits in the right column on desktop (stacked above the text on mobile via `order`). The offset `bg-accent/15` block behind the frame is the editorial accent touch; `next/image` with `unoptimized: true` (set in Task 1) serves the JPEG directly.
 
 - [ ] **Step 2: Create `src/components/sections/About.js`**
 
@@ -1095,6 +1185,7 @@ export default function Home() {
           content="Software Engineer building secure systems. Neo Browser team at iamneo."
         />
         <meta property="og:type" content="website" />
+        <meta property="og:image" content="/images/profile/portrait-1.jpg" />
       </Head>
       <SiteNav />
       <main>
@@ -1263,7 +1354,7 @@ git commit -m "feat: static project detail pages from content source"
 **Files:**
 - Create: `src/pages/404.js`
 - Create: `LICENSE`
-- Verify: `public/favicon.svg`, `public/Resume.pdf`, `firebase.json`
+- Verify: `public/favicon.svg`, `public/Resume.pdf`; confirm no `firebase.json` remains
 
 - [ ] **Step 1: Create `src/pages/404.js`**
 
@@ -1309,9 +1400,9 @@ repository, in whole or in part, without prior written consent.
 Run: `ls public/favicon.svg public/Resume.pdf`
 Expected: both exist (carried over from the old site). If `Resume.pdf` is outdated, replace the file in `public/` (same path) — no code change needed.
 
-- [ ] **Step 4: Confirm Firebase config unchanged & still valid**
+- [ ] **Step 4: Confirm Cloudflare Pages settings (documentation, no code change)**
 
-Read `firebase.json`; it must keep `"public": "out"`. The SPA rewrite (`** -> /index.html`) is harmless for a static multi-page export (real files take precedence), so leave it as-is.
+Cloudflare Pages → Create project → connect the GitHub repo, then set **Build command** `npm run build`, **Build output directory** `out`, and **Node version** 20 (picked up from `.nvmrc`). Confirm no `firebase.json` remains in the repo (removed in Task 1B). Deployment is automatic on push to the connected branch.
 
 - [ ] **Step 5: Lint + full production build**
 
@@ -1347,14 +1438,14 @@ A minimalist, editorial portfolio. Single-scroll home with per-project detail pa
 - Tailwind CSS 3 with a tokenized light/dark theme
 - Framer Motion (restrained scroll reveals)
 - Fonts: Fraunces (display) + Geist / Geist Mono
-- Hosting: Firebase Hosting (static `out/`)
+- Hosting: Cloudflare Pages (static `out/`)
 
 ## Develop
 ```bash
 npm install
 npm run dev      # http://localhost:3000
 npm run build    # static export to out/
-npm run deploy   # build + firebase deploy --only hosting
+# Deploy: push to GitHub — Cloudflare Pages builds and serves out/ automatically.
 ```
 
 ## Content
@@ -1377,7 +1468,7 @@ git commit -m "docs: update README for the rebuilt portfolio"
 ## Self-Review (completed by plan author)
 
 **1. Spec coverage:**
-- Full rebuild, same stack → Tasks 1, 9 (Next 14 + Tailwind + Firebase static export). ✓
+- Full rebuild, same app stack → Tasks 1, 9 (Next 14 + Tailwind, static export). ✓
 - Minimalist editorial, light-first, vermilion accent, Fraunces/Geist/Geist Mono → Tasks 2, 4. ✓
 - Single-page + detail pages → Tasks 9, 10. ✓
 - Current Software Engineer role (Feb 2026, Neo Browser, iamneo) → Task 3 (`experience.js`, `profile.js`). ✓
@@ -1387,6 +1478,8 @@ git commit -m "docs: update README for the rebuilt portfolio"
 - Single source of truth / no duplication → Task 3 (shared `content/`), consumed by sections and `[slug].js`. ✓
 - Restrained motion + reduced-motion → Task 5 `Reveal.js`, Task 2 CSS. ✓
 - Authorship/anti-copy → Task 6 Footer + Task 11 LICENSE. ✓
+- Hosting on Cloudflare Pages, Firebase removed → Task 1 (no firebase-tools/deploy script), Task 1B (delete firebase files, add `.nvmrc` + `_headers`), Task 11 Step 4 (Cloudflare settings), Task 12 README. ✓
+- Provided portrait used as framed Hero block + optimized → Task 1B Step 4 (optimize), Task 3 (`profile.portrait`), Task 7 Hero (next/image two-column). ✓
 
 **2. Placeholder scan:** No "TBD"/"add error handling"/"similar to" placeholders; all steps contain full code. Contact links, education, and project data are real (sourced from the existing site and verified repos).
 

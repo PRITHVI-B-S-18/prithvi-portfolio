@@ -1,14 +1,11 @@
 import '@/styles/globals.css';
-import { ThemeProvider } from 'next-themes';
-import { Fraunces } from 'next/font/google';
 import localFont from 'next/font/local';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useRouter } from 'next/router';
+import ScrollProgress from '@/components/ui/ScrollProgress';
 
-const fraunces = Fraunces({
-  subsets: ['latin'],
-  variable: '--font-fraunces',
-  display: 'swap',
-});
-
+// Load Geist via next/font/local pointing at the package's woff2 files
+// (the geist package's own ESM export breaks Node 22 dir-import resolution).
 const geistSans = localFont({
   src: '../../node_modules/geist/dist/fonts/geist-sans/Geist-Variable.woff2',
   variable: '--font-geist-sans',
@@ -24,11 +21,22 @@ const geistMono = localFont({
 });
 
 export default function App({ Component, pageProps }) {
+  const router = useRouter();
+
   return (
-    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-      <div className={`${fraunces.variable} ${geistSans.variable} ${geistMono.variable} font-sans`}>
-        <Component {...pageProps} />
-      </div>
-    </ThemeProvider>
+    <div className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
+      <ScrollProgress />
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={router.pathname}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <Component {...pageProps} />
+        </motion.div>
+      </AnimatePresence>
+    </div>
   );
 }

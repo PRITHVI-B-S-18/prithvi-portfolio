@@ -1,11 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
   <defs>
-    <linearGradient id="bspGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stopColor="#6366f1" />
-      <stop offset="50%" stopColor="#a855f7" />
-      <stop offset="100%" stopColor="#ec4899" />
+    <linearGradient id="pbs" x1="10" y1="8" x2="54" y2="56" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#826eff"/>
+      <stop offset="1" stop-color="#5896ff"/>
     </linearGradient>
   </defs>
-  <rect width="100" height="100" rx="20" fill="url(#bspGradient)"/>
-  <text x="50" y="65" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="white" text-anchor="middle">BSP</text>
+  <rect width="64" height="64" rx="15" fill="#0d0d13"/>
+  <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="14.25" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1.5"/>
+  <path d="M23 49V16h12.5C42 16 46 20 46 26s-4 10-10.5 10H23"
+        stroke="url(#pbs)" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="44" cy="46" r="3.2" fill="url(#pbs)"/>
 </svg>

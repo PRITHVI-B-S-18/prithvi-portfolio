@@ -1,49 +1,85 @@
 import { experience } from '@/content/experience';
 import Section from '@/components/layout/Section';
 import Reveal from '@/components/ui/Reveal';
-import Tag from '@/components/ui/Tag';
+import SpotlightCard from '@/components/ui/SpotlightCard';
+
+const typeStyles = {
+  Current: 'bg-accent/15 text-accent',
+  Promoted: 'bg-emerald-500/15 text-emerald-400',
+  Internship: 'bg-amber-500/15 text-amber-400',
+  'Full-time': 'bg-sky-500/15 text-sky-400',
+};
 
 export default function Experience() {
   return (
-    <Section id="experience" number="02" title="Experience">
-      <ol className="space-y-12">
+    <Section
+      id="experience"
+      label="Experience"
+      title="How I grew, and what I shipped."
+      subtitle="From a virtual data internship to shipping a secure cross-platform product. Three years, mostly one company, compounding ownership."
+    >
+      <div className="space-y-4">
         {experience.map((job, i) => (
           <Reveal key={`${job.role}-${job.period}`} delay={i * 0.05}>
-            <li className="grid gap-4 sm:grid-cols-[10rem_1fr]">
-              <div className="font-mono text-sm text-muted">
-                <p>{job.period}</p>
-                {job.current && (
-                  <span className="mt-2 inline-block rounded-full bg-accent/10 px-2 py-0.5 text-xs text-accent">
-                    Current
-                  </span>
-                )}
-              </div>
-              <div>
-                <h3 className="font-serif text-xl text-ink">{job.role}</h3>
-                <p className="font-mono text-sm text-muted">
-                  {job.org}
-                  {job.team ? ` · ${job.team}` : ''}
-                </p>
-                <p className="mt-3 text-ink">{job.summary}</p>
-                {job.highlights.length > 0 && (
-                  <ul className="mt-3 list-disc space-y-1 pl-5 text-muted">
-                    {job.highlights.map((h, j) => (
-                      <li key={j}>{h}</li>
-                    ))}
-                  </ul>
-                )}
-                {job.stack.length > 0 && (
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {job.stack.map((s) => (
-                      <Tag key={s}>{s}</Tag>
+            <SpotlightCard
+              className={`rounded-xl border bg-surface p-5 transition-colors duration-300 sm:p-6 ${
+                job.current ? 'border-accent/50' : 'border-line hover:border-accent/40'
+              }`}
+              whileHover={{ y: -3 }}
+              transition={{ duration: 0.2 }}
+              radius={300}
+            >
+              <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+                <div>
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    <span className={`rounded-full px-2.5 py-0.5 font-mono text-[11px] font-medium ${typeStyles[job.type] || typeStyles['Full-time']}`}>
+                      {job.current && <span className="mr-1.5 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-accent align-middle" />}
+                      {job.type}
+                    </span>
+                    {job.metrics?.map((m) => (
+                      <span key={m.label} className="font-mono text-[11px] text-faint">
+                        <span className="font-sans font-bold text-gradient">{m.value}</span> {m.label}
+                      </span>
                     ))}
                   </div>
-                )}
+                  <h3 className="mt-3 font-sans text-lg font-semibold text-ink sm:text-xl">{job.role}</h3>
+                  <p className="mt-0.5 font-mono text-sm text-muted">
+                    {job.org}
+                    {job.team ? ` · ${job.team}` : ''}
+                  </p>
+                </div>
+                <span className="shrink-0 font-mono text-xs text-faint">{job.period}</span>
               </div>
-            </li>
+
+              <p className="mt-3 text-sm leading-relaxed text-muted">{job.summary}</p>
+
+              {job.highlights.length > 0 && (
+                <ul className="mt-4 grid gap-x-6 gap-y-2 sm:grid-cols-2">
+                  {job.highlights.map((h, j) => (
+                    <li key={j} className="flex items-baseline gap-2.5 text-sm leading-relaxed">
+                      <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent" />
+                      <span className="text-muted">
+                        <span className="text-faint">{h.tag}. </span>
+                        {h.text}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {job.stack.length > 0 && (
+                <div className="mt-4 flex flex-wrap gap-1.5">
+                  {job.stack.map((s) => (
+                    <span key={s} className="rounded border border-line px-2 py-0.5 font-mono text-[11px] text-muted">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </SpotlightCard>
           </Reveal>
         ))}
-      </ol>
+      </div>
     </Section>
   );
 }
