@@ -68,8 +68,18 @@ body::after {
   background-size: 200px 200px;
 }
 
-/* Smooth color crossfade only while toggling themes (class added briefly by
-   the toggle, then removed so it never slows hover/normal transitions). */
+/* Preferred theme switch: one GPU-composited page crossfade (View Transitions
+   API). Element count and blur layers don't matter, so it stays smooth on
+   mobile. Chrome / mobile Chrome / Safari 18.2+. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.38s;
+  animation-timing-function: ease;
+}
+
+/* Fallback for browsers without View Transitions: per-element color crossfade
+   only while toggling (class added briefly by the toggle, then removed so it
+   never slows hover/normal transitions). */
 .theme-transition,
 .theme-transition *,
 .theme-transition *::before,
@@ -132,5 +142,9 @@ body::after {
   .theme-transition *::before,
   .theme-transition *::after {
     transition: none !important;
+  }
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
   }
 }
