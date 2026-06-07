@@ -32,7 +32,7 @@ export default function ProjectCard({ project }) {
             className="absolute inset-0 opacity-[0.07]"
             style={{
               backgroundImage:
-                'linear-gradient(rgb(255 255 255) 1px, transparent 1px), linear-gradient(90deg, rgb(255 255 255) 1px, transparent 1px)',
+                'linear-gradient(rgb(var(--ink)) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--ink)) 1px, transparent 1px)',
               backgroundSize: '22px 22px',
             }}
             aria-hidden="true"
