@@ -35,7 +35,7 @@ export default function ProjectDetail({ project, prev, next }) {
   const cover = `linear-gradient(135deg, hsl(${hue} 70% 60% / 0.30), hsl(${(hue + 50) % 360} 70% 55% / 0.10) 60%, transparent)`;
 
   return (
-    <article className="mx-auto max-w-4xl px-6 pb-24 pt-10">
+    <article className="mx-auto max-w-4xl px-6 pb-12 pt-10">
       <Link
         href="/#work"
         className="group inline-flex items-center gap-2 font-mono text-sm text-muted transition-colors hover:text-accent"
