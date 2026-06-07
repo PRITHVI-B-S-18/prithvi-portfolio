@@ -4,7 +4,7 @@ export const experience = [
     org: 'iamneo',
     team: 'Neo Browser team',
     type: 'Current',
-    period: 'Feb 2026 - Present',
+    period: 'Apr 2026 - Present',
     current: true,
     summary:
       'Cross-platform secure exam browser built on Electron 32 / Node 20 for Windows, macOS, and Linux.',
@@ -22,23 +22,41 @@ export const experience = [
     stack: ['Electron', 'Node.js', 'JavaScript', 'electron-updater'],
   },
   {
-    role: 'Associate Tech Content - Internal Automation',
+    role: 'Associate - Tech Content',
     org: 'iamneo',
     type: 'Full-time',
-    period: 'Jul 2025 - Jan 2026',
+    period: 'Sep 2025 - Mar 2026',
     current: false,
     summary:
       'Owned a run of internal products end to end, building AI tooling and full-stack systems adopted across teams.',
     highlights: [
       { tag: 'AI', text: 'Built AI-powered MCQ generation and transcript-based evaluation systems with Azure OpenAI.' },
-      { tag: 'Platforms', text: 'Architected operational dashboards and a trainer-scheduling platform used day to day.' },
+      { tag: 'Platforms', text: 'Architected operational and analytics dashboards adopted across teams.' },
       { tag: 'Tooling', text: 'Shipped self-service tools for license, asset, and signature management.' },
     ],
     metrics: [
       { value: '8+', label: 'Systems shipped' },
       { value: '40%', label: 'Efficiency gained' },
     ],
-    stack: ['React', 'FastAPI', 'Flask', 'Azure OpenAI', 'Firebase', 'n8n'],
+    stack: ['React', 'TypeScript', 'FastAPI', 'Azure OpenAI', 'Firebase', 'n8n'],
+  },
+  {
+    role: 'Junior Associate - Program Management',
+    org: 'iamneo',
+    type: 'Full-time',
+    period: 'Jun 2025 - Sep 2025',
+    current: false,
+    summary:
+      'Program-management role building trainer tooling and supporting client institutions on the ground.',
+    highlights: [
+      { tag: 'Tooling', text: 'Built TrainOps, a trainer-management platform (React, Firebase, Mapbox) for scheduling and GPS-verified attendance.' },
+      { tag: 'Clients', text: 'Handled client relationships and provided on-ground support at client locations for training rollouts and operations.' },
+    ],
+    metrics: [
+      { value: 'On-site', label: 'Client support' },
+      { value: 'GPS', label: 'Attendance' },
+    ],
+    stack: ['React', 'Firebase', 'Mapbox', 'NodeMailer'],
   },
   {
     role: 'Trainee - Program Management',
@@ -47,11 +65,11 @@ export const experience = [
     period: 'Jan 2025 - Jun 2025',
     current: false,
     summary:
-      'Built automation that cut manual setup and laid the foundation for the production systems that followed.',
+      'Built automation that cut manual setup and supported program-management operations.',
     highlights: [
       { tag: 'Automation', text: 'Built a Selenium automation tool for course and test management.' },
-      { tag: 'Foundation', text: 'Designed the foundational architecture that became the TrainOps platform.' },
-      { tag: 'Growth', text: 'Promoted to Associate Tech Content based on delivery and impact.' },
+      { tag: 'Operations', text: 'Supported program-management workflows across content and trainer teams.' },
+      { tag: 'Growth', text: 'Promoted to Junior Associate based on delivery and impact.' },
     ],
     metrics: [
       { value: '70%', label: 'Setup time cut' },
