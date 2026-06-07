@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import { profile } from '@/content/profile';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 
 const links = [
   { label: 'About', href: '/#about' },
@@ -80,27 +81,31 @@ export default function SiteNav() {
             >
               Résumé ↗
             </a>
+            <ThemeToggle />
           </div>
 
-          {/* Mobile toggle */}
-          <button
-            type="button"
-            aria-label={open ? 'Close menu' : 'Open menu'}
-            aria-expanded={open}
-            onClick={() => setOpen((v) => !v)}
-            className="relative z-[70] flex h-10 w-10 flex-col items-center justify-center gap-1.5 md:hidden"
-          >
-            <motion.span
-              className="block h-0.5 w-6 bg-ink"
-              animate={open ? { rotate: 45, y: 4 } : { rotate: 0, y: 0 }}
-              transition={{ duration: 0.2 }}
-            />
-            <motion.span
-              className="block h-0.5 w-6 bg-ink"
-              animate={open ? { rotate: -45, y: -4 } : { rotate: 0, y: 0 }}
-              transition={{ duration: 0.2 }}
-            />
-          </button>
+          {/* Mobile controls */}
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeToggle />
+            <button
+              type="button"
+              aria-label={open ? 'Close menu' : 'Open menu'}
+              aria-expanded={open}
+              onClick={() => setOpen((v) => !v)}
+              className="relative z-[70] flex h-10 w-10 flex-col items-center justify-center gap-1.5"
+            >
+              <motion.span
+                className="block h-0.5 w-6 bg-ink"
+                animate={open ? { rotate: 45, y: 4 } : { rotate: 0, y: 0 }}
+                transition={{ duration: 0.2 }}
+              />
+              <motion.span
+                className="block h-0.5 w-6 bg-ink"
+                animate={open ? { rotate: -45, y: -4 } : { rotate: 0, y: 0 }}
+                transition={{ duration: 0.2 }}
+              />
+            </button>
+          </div>
         </nav>
       </motion.header>
 
