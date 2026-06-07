@@ -1,49 +1,28 @@
-# Prithvi Portfolio
+# Prithvi B S — Portfolio
 
-A modern, responsive portfolio website built with Next.js, Tailwind CSS, and Framer Motion. Showcases projects, experience, skills, and achievements.
-
-## Features
-
-- 🎨 Modern UI/UX with dark/light mode
-- 📱 Fully responsive across all devices
-- ⚡ Static export for fast hosting
-- 🎭 Smooth animations with Framer Motion
-- 🎯 SEO friendly
+A minimalist, editorial portfolio. Single-scroll home with per-project detail pages.
 
 ## Tech Stack
 
-- **Framework**: Next.js 13
-- **Styling**: Tailwind CSS
-- **Animations**: Framer Motion
-- **Deployment**: Static export → Firebase Hosting
+- Next.js 14 (Pages Router, static export)
+- Tailwind CSS 3 with a tokenized light/dark theme
+- Framer Motion (restrained scroll reveals)
+- Fonts: Fraunces (display) + Geist / Geist Mono
+- Hosting: Cloudflare Pages (static `out/`)
 
-## Getting Started
+## Develop
 
 ```bash
-# Install dependencies
 npm install
-
-# Run development server
-npm run dev
-# Open http://localhost:3000
-
-# Build for production (output in `out/`)
-npm run build
-
-# Deploy to Firebase Hosting
-npm run deploy
+npm run dev      # http://localhost:3000
+npm run build    # static export to out/
+# Deploy: push to GitHub — Cloudflare Pages builds and serves out/ automatically.
 ```
 
-## Project Sections
+## Content
 
-- **Home** — Intro and highlights  
-- **About** — Bio, stats, tech stack  
-- **Experience** — Work history and roles  
-- **Projects** — 8 production systems (TrainOps, MCQ Generator, Trainer Scorer, Course Automation, Voice Assistant, LXD Analytics, Software License Manager, Asset Manager)  
-- **Skills** — Technologies and expertise  
-- **Achievements** — Awards and milestones  
-- **Contact** — Email, LinkedIn, GitHub  
-
-## License
+All copy lives in `src/content/` (`profile`, `experience`, `projects`, `skills`).
+Edit those modules to update the site; project detail pages are generated from
+`projects.js`.
 
 © 2026 Prithvi B S. All rights reserved.
