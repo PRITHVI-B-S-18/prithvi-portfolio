@@ -10,15 +10,33 @@ export default function ThemeToggle({ className = '' }) {
   const toggle = () => {
     const next = !dark;
     const root = document.documentElement;
-    // Enable color crossfade just for this switch, then remove it.
-    root.classList.add('theme-transition');
-    setDark(next);
-    root.classList.toggle('dark', next);
-    try {
-      localStorage.setItem('theme', next ? 'dark' : 'light');
-    } catch {
-      /* ignore */
+
+    const apply = () => {
+      setDark(next);
+      root.classList.toggle('dark', next);
+      try {
+        localStorage.setItem('theme', next ? 'dark' : 'light');
+      } catch {
+        /* ignore */
+      }
+    };
+
+    // Respect reduced-motion: switch instantly, no animation.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      apply();
+      return;
     }
+
+    // Preferred: one GPU-composited crossfade of the whole page. Stays smooth
+    // on mobile, where fading every element's color individually drops frames.
+    if (typeof document.startViewTransition === 'function') {
+      document.startViewTransition(apply);
+      return;
+    }
+
+    // Fallback (older Safari): per-element color crossfade for ~0.4s.
+    root.classList.add('theme-transition');
+    apply();
     window.setTimeout(() => root.classList.remove('theme-transition'), 450);
   };
 
