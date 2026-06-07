@@ -31,7 +31,7 @@ const statusStyles = {
 
 export default function ProjectDetail({ project, prev, next }) {
   const { slug, title, subtitle, oneLiner, role, year, status, tech, metrics, detail } = project;
-  const hue = hueFromSlug(slug);
+  const hue = project.hue ?? hueFromSlug(slug);
   const cover = `linear-gradient(135deg, hsl(${hue} 70% 60% / 0.30), hsl(${(hue + 50) % 360} 70% 55% / 0.10) 60%, transparent)`;
 
   return (
@@ -164,7 +164,7 @@ export default function ProjectDetail({ project, prev, next }) {
 
       {/* Prev / Next */}
       {(prev || next) && (
-        <nav className="mt-14 grid gap-4 border-t border-line pt-10 sm:grid-cols-2">
+        <nav className="grid gap-4 border-t border-line pt-10 sm:grid-cols-2">
           {prev ? (
             <Link
               href={`/work/${prev.slug}`}

@@ -15,7 +15,7 @@ const statusStyles = {
 };
 
 export default function ProjectCard({ project }) {
-  const hue = hueFromSlug(project.slug);
+  const hue = project.hue ?? hueFromSlug(project.slug);
   const cover = `linear-gradient(135deg, hsl(${hue} 70% 60% / 0.32), hsl(${(hue + 50) % 360} 70% 55% / 0.10) 60%, transparent)`;
 
   return (

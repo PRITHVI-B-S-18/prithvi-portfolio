@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Head from 'next/head';
 import SiteNav from '@/components/layout/SiteNav';
 import Footer from '@/components/layout/Footer';
@@ -9,6 +10,17 @@ import Skills from '@/components/sections/Skills';
 import Contact from '@/components/sections/Contact';
 
 export default function Home() {
+  // When arriving with a hash (e.g. "Back to work" → /#work, or a refresh on
+  // /#about), scroll to that section once the page has laid out.
+  useEffect(() => {
+    const { hash } = window.location;
+    if (!hash || hash.length < 2) return undefined;
+    const el = document.querySelector(hash);
+    if (!el) return undefined;
+    const t = setTimeout(() => el.scrollIntoView({ behavior: 'auto' }), 60);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <>
       <Head>

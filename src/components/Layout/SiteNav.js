@@ -108,15 +108,31 @@ export default function SiteNav() {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed inset-0 z-[60] bg-bg/95 backdrop-blur-xl md:hidden"
+            className="fixed inset-0 z-[60] flex flex-col bg-bg/95 backdrop-blur-xl md:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
           >
             <div className="pointer-events-none absolute -right-24 top-10 h-80 w-80 glow blur-3xl" aria-hidden="true" />
+
+            {/* Overlay's own top bar with a visible close button */}
+            <div className="flex items-center justify-between border-b border-line px-6 py-4">
+              <span className="font-sans text-base font-bold tracking-tight text-ink">Prithvi B S</span>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                aria-label="Close menu"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-accent hover:text-accent"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+              </button>
+            </div>
+
             <motion.nav
-              className="flex h-full flex-col justify-center gap-3 px-8"
+              className="flex flex-1 flex-col justify-center gap-3 px-8"
               variants={listVariants}
               initial="closed"
               animate="open"

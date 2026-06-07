@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { profile } from '@/content/profile';
+import Motto from '@/components/ui/Motto';
 
 const nav = [
   { label: 'About', href: '/#about' },
@@ -65,9 +66,10 @@ export default function Footer() {
           </a>
         </div>
 
-        <div className="mt-10 flex flex-col gap-1.5 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-10 flex flex-col items-center gap-4 border-t border-line pt-6 sm:flex-row sm:justify-between">
           <p className="font-mono text-xs text-faint">© {new Date().getFullYear()} Prithvi B S. All rights reserved.</p>
-          <p className="font-mono text-xs text-faint">Built with Next.js &amp; Tailwind</p>
+          <Motto />
+          <p className="hidden font-mono text-xs text-faint sm:block">Built with Next.js &amp; Tailwind</p>
         </div>
       </div>
     </footer>

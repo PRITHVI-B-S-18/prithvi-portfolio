@@ -1,6 +1,7 @@
 export const projects = [
   {
     slug: 'neo-browser',
+    hue: 150,
     title: 'Neo Browser',
     subtitle: 'Secure lockdown exam browser',
     oneLiner: 'Secure, cross-platform lockdown browser for online exams.',
@@ -8,7 +9,7 @@ export const projects = [
     year: '2026',
     status: 'In Production',
     featured: true,
-    tech: ['Electron', 'Node.js', 'Bytenode', 'electron-updater', 'systeminformation'],
+    tech: ['Electron', 'Node.js', 'electron-updater', 'AWS (S3, CloudFront)', 'Bytenode'],
     metrics: [
       { value: '3', label: 'Platforms' },
       { value: 'AI', label: 'Behavior detection' },
@@ -18,17 +19,18 @@ export const projects = [
       problem:
         'Online assessments need a controlled environment that keeps exams fair across Windows, macOS, and Linux without locking students out when something goes wrong.',
       build: [
-        'A telemetry data system that surfaces live session signals during a test.',
-        'Dynamic network whitelisting so only approved destinations are reachable mid-exam.',
-        'AI typing-behavior detection that flags anomalous input patterns.',
-        'A redesigned splash screen plus security and stability hardening passes.',
-        'Continuous build testing across all three desktop platforms for every release.',
+        'AI typing-behavior detection that flags anomalous input in real time.',
+        'A dynamic network whitelist so only approved destinations are reachable during an exam.',
+        'A live telemetry pipeline surfacing session signals and anomalies to the platform mid-test.',
+        'An S3 and CloudFront auto-update pipeline delivering releases across Windows, macOS, and Linux.',
+        'Cross-platform security and stability hardening, with a revamped browser UI and splash screen.',
       ],
       outcome: 'A more stable, secure exam browser shipping reliably to Windows, macOS, and Linux.',
     },
   },
   {
     slug: 'trainops',
+    hue: 200,
     title: 'TrainOps',
     subtitle: 'Enterprise trainer management',
     oneLiner: 'Trainer scheduling and management with three roles, GPS verification, and live sync.',
@@ -55,6 +57,7 @@ export const projects = [
   },
   {
     slug: 'mcq-generator',
+    hue: 300,
     title: 'MCQ Generator',
     subtitle: 'AI question-creation pipeline',
     oneLiner: 'AI question-generation platform with quality control and dual export.',
@@ -81,6 +84,7 @@ export const projects = [
   },
   {
     slug: 'lxd-analytics',
+    hue: 32,
     title: 'LXD Analytics',
     subtitle: 'Training & ops analytics',
     oneLiner: 'Analytics dashboard turning SharePoint/Excel training data into live dashboards.',
@@ -112,7 +116,7 @@ export const projects = [
     role: 'Full-stack',
     year: '2025',
     status: 'In Use',
-    featured: true,
+    featured: false,
     tech: ['React', 'TypeScript', 'Firebase', 'Vite', 'SheetJS'],
     metrics: [
       { value: 'Bulk', label: 'Assign & export' },
@@ -131,6 +135,7 @@ export const projects = [
   },
   {
     slug: 'asset-manager',
+    hue: 255,
     title: 'Asset Manager',
     subtitle: 'Asset & policy management',
     oneLiner: 'Manage employees, laptops, monitors, policies, and other IT assets.',
@@ -156,6 +161,7 @@ export const projects = [
   },
   {
     slug: 'course-automation',
+    hue: 345,
     title: 'Course Automation',
     subtitle: 'Selenium course/test ops',
     oneLiner: 'Browser automation for course and test management with reporting.',
@@ -187,7 +193,7 @@ export const projects = [
     role: 'Full-stack',
     year: '2025',
     status: 'Completed',
-    featured: true,
+    featured: false,
     tech: ['React', 'Vite', 'FastAPI', 'Azure OpenAI', 'Firebase'],
     metrics: [
       { value: 'GPT-4o', label: 'Model' },

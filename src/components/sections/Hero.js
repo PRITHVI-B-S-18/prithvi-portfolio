@@ -91,7 +91,7 @@ export default function Hero() {
               <Image src={portrait} alt={name} width={1122} height={1402} priority className="h-auto w-full object-cover" />
             </div>
             <motion.div
-              className="absolute -bottom-5 -left-5 rounded-xl border border-line bg-surface/90 px-4 py-3 backdrop-blur"
+              className="absolute bottom-3 left-3 rounded-xl border border-line bg-surface/90 px-4 py-3 backdrop-blur sm:-bottom-5 sm:-left-5"
               initial={reduce ? {} : { opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.5 }}

@@ -1,6 +1,7 @@
 import '@/styles/globals.css';
+import { useEffect } from 'react';
 import localFont from 'next/font/local';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import ScrollProgress from '@/components/ui/ScrollProgress';
 
@@ -23,20 +24,27 @@ const geistMono = localFont({
 export default function App({ Component, pageProps }) {
   const router = useRouter();
 
+  // Let the browser restore scroll position on refresh (honoring hashes),
+  // instead of always snapping to the top.
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'auto';
+    }
+  }, []);
+
   return (
     <div className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
       <ScrollProgress />
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={router.pathname}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <Component {...pageProps} />
-        </motion.div>
-      </AnimatePresence>
+      {/* Enter-only fade keyed by route. No exit animation, so navigating away
+          replaces the page instantly (avoids the old page flashing at the top). */}
+      <motion.div
+        key={router.pathname}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <Component {...pageProps} />
+      </motion.div>
     </div>
   );
 }
