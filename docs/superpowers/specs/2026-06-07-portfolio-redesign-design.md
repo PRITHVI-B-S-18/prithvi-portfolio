@@ -97,15 +97,16 @@ the home sections and the detail pages — eliminating the old duplication.
 
 - `content/profile.js` — name, positioning line, current role, links, résumé path.
 - `content/experience.js` — iamneo timeline entries (role, org, dates, high-level
-  highlights). Current entry: **Software Engineer · iamneo · Neo Browser team · 2026 –
-  Present** (confirm exact start month; Linear activity begins ~Feb 2026).
+  highlights). Current entry: **Software Engineer · iamneo · Neo Browser team · Feb 2026 –
+  Present** (start month from Linear: account created 2026-02-13, first started ticket
+  2026-02-17).
 - `content/projects.js` — array of project objects, each:
   `{ slug, title, oneLiner, role, year, tech[], highlights[], outcome, links{}, featured }`.
 - `content/skills.js` — grouped skill categories.
 
 ### Experience content (current role)
 
-> **Software Engineer — iamneo · Neo Browser team · 2026 – Present**
+> **Software Engineer — iamneo · Neo Browser team · Feb 2026 – Present**
 > Cross-platform secure exam browser built on **Electron 32 / Node 20** (Windows, macOS,
 > Linux). Delivered: telemetry data system, dynamic network whitelisting, AI typing-behavior
 > detection, splash screen and security hardening, and continuous cross-platform build
@@ -174,8 +175,10 @@ Protection comes from distinctiveness + provenance:
 - Internationalization.
 - Backend contact form (mailto link only).
 
-## 11. Open Items to Confirm During Review
+## 11. Resolved Decisions (post-review)
 
-- Exact start month of the Neo Browser / Software Engineer role (spec assumes ~early 2026).
-- Final accent color (vermilion proposed; swappable token).
-- Whether to keep the source repo private (recommended) vs. public.
+- **Neo Browser / Software Engineer start month:** Feb 2026 (from Linear evidence).
+- **Accent color:** vermilion `#E0512F` (confirmed; token-swappable).
+- **Work list:** curated 8 + 2 "More" row as listed in §7 (confirmed).
+- **Repo privacy:** recommend keeping source repo private and publishing only built `out/`
+  (build-time choice; revisit at deploy).
