@@ -1,42 +1,35 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useInView } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { useInView, useReducedMotion } from 'framer-motion';
 
-const AnimatedCounter = ({ value, suffix = '', duration = 2000 }) => {
-  const [count, setCount] = useState(0);
+export default function AnimatedCounter({ value, prefix = '', suffix = '', duration = 1.4 }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-  const hasAnimated = useRef(false);
+  const inView = useInView(ref, { once: true, margin: '-40px' });
+  const reduce = useReducedMotion();
+  const [display, setDisplay] = useState(0);
 
   useEffect(() => {
-    if (isInView && !hasAnimated.current) {
-      hasAnimated.current = true;
-      let startTimestamp = null;
-      
-      const step = (timestamp) => {
-        if (!startTimestamp) startTimestamp = timestamp;
-        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-        
-        // Easing function (easeOutQuart)
-        const eased = 1 - Math.pow(1 - progress, 4);
-        setCount(Math.floor(eased * value));
-        
-        if (progress < 1) {
-          window.requestAnimationFrame(step);
-        } else {
-          setCount(value);
-        }
-      };
-      
-      window.requestAnimationFrame(step);
+    if (!inView) return;
+    if (reduce) {
+      setDisplay(value);
+      return;
     }
-  }, [isInView, value, duration]);
+    let raf;
+    const start = performance.now();
+    const tick = (now) => {
+      const t = Math.min((now - start) / (duration * 1000), 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setDisplay(Math.round(eased * value));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [inView, reduce, value, duration]);
 
   return (
     <span ref={ref}>
-      {count}{suffix}
+      {prefix}
+      {display}
+      {suffix}
     </span>
   );
-};
-
-export default AnimatedCounter;
-
+}
