@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { profile } from '@/content/profile';
 import Button from '@/components/ui/Button';
 import AnimatedCounter from '@/components/ui/AnimatedCounter';
+import { MailIcon, GitHubIcon, LinkedInIcon } from '@/components/ui/Icons';
 
 export default function Hero() {
   const reduce = useReducedMotion();
@@ -77,9 +78,15 @@ export default function Hero() {
           </motion.div>
 
           <motion.div {...rise(0.34)} className="mt-8 flex flex-wrap gap-x-6 gap-y-2 font-mono text-sm">
-            <a className="text-muted transition-colors hover:text-accent" href={`mailto:${links.email}`}>Email</a>
-            <a className="text-muted transition-colors hover:text-accent" href={links.github} target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a className="text-muted transition-colors hover:text-accent" href={links.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a className="inline-flex items-center gap-1.5 text-muted transition-colors hover:text-accent" href={`mailto:${links.email}`}>
+              <MailIcon size={15} /> Email
+            </a>
+            <a className="inline-flex items-center gap-1.5 text-muted transition-colors hover:text-accent" href={links.github} target="_blank" rel="noopener noreferrer">
+              <GitHubIcon size={15} /> GitHub
+            </a>
+            <a className="inline-flex items-center gap-1.5 text-muted transition-colors hover:text-accent" href={links.linkedin} target="_blank" rel="noopener noreferrer">
+              <LinkedInIcon size={15} /> LinkedIn
+            </a>
           </motion.div>
         </div>
 
@@ -97,9 +104,14 @@ export default function Hero() {
               transition={{ delay: 0.6, duration: 0.5 }}
             >
               <p className="font-mono text-xs text-faint">Currently</p>
-              <p className="mt-0.5 font-sans text-sm font-medium text-ink">
-                {currentRole.org} · {currentRole.team}
-              </p>
+              <Image
+                src="/images/iamneo-logo.png"
+                alt={currentRole.org}
+                width={132}
+                height={40}
+                className="iamneo-logo mt-1 h-5 w-auto"
+              />
+              <p className="mt-1 font-sans text-sm font-medium text-ink">{currentRole.team}</p>
             </motion.div>
           </div>
         </motion.div>

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { profile } from '@/content/profile';
 import Motto from '@/components/ui/Motto';
+import { MailIcon, GitHubIcon, LinkedInIcon } from '@/components/ui/Icons';
 
 const nav = [
   { label: 'About', href: '/#about' },
@@ -13,9 +14,9 @@ const nav = [
 export default function Footer() {
   const { links } = profile;
   const socials = [
-    { label: 'Email', href: `mailto:${links.email}` },
-    { label: 'GitHub', href: links.github, ext: true },
-    { label: 'LinkedIn', href: links.linkedin, ext: true },
+    { label: 'Email', href: `mailto:${links.email}`, Icon: MailIcon },
+    { label: 'GitHub', href: links.github, ext: true, Icon: GitHubIcon },
+    { label: 'LinkedIn', href: links.linkedin, ext: true, Icon: LinkedInIcon },
   ];
 
   return (
@@ -28,16 +29,18 @@ export default function Footer() {
               Prithvi B S
             </Link>
             <p className="mt-1 font-mono text-xs text-muted">Software Engineer · secure systems &amp; internal tools</p>
-            <div className="mt-4 flex gap-4">
-              {socials.map((s) => (
+            <div className="mt-4 flex gap-3">
+              {socials.map(({ label, href, ext, Icon }) => (
                 <a
-                  key={s.label}
-                  href={s.href}
-                  target={s.ext ? '_blank' : undefined}
-                  rel={s.ext ? 'noopener noreferrer' : undefined}
-                  className="font-mono text-xs text-muted transition-colors hover:text-accent"
+                  key={label}
+                  href={href}
+                  target={ext ? '_blank' : undefined}
+                  rel={ext ? 'noopener noreferrer' : undefined}
+                  aria-label={label}
+                  title={label}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line text-muted transition-colors hover:border-accent hover:text-accent"
                 >
-                  {s.label}
+                  <Icon size={16} />
                 </a>
               ))}
             </div>
@@ -67,7 +70,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col items-center gap-4 border-t border-line pt-6 sm:flex-row sm:justify-between">
-          <p className="font-mono text-xs text-faint">© {new Date().getFullYear()} Prithvi B S. All rights reserved.</p>
+          <p className="font-mono text-xs text-faint">© {new Date().getFullYear()} Prithvi B S</p>
           <Motto />
           <p className="hidden font-mono text-xs text-faint sm:block">Built with Next.js &amp; Tailwind</p>
         </div>

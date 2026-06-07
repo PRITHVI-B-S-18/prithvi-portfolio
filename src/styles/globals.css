@@ -31,6 +31,11 @@
   --accent-2: 88 150 255;
 }
 
+/* iamneo wordmark is dark navy; invert to white on the dark theme */
+.dark .iamneo-logo {
+  filter: brightness(0) invert(1);
+}
+
 /* Light theme: lift surface cards off the gray canvas for definition */
 :root:not(.dark) .bg-surface {
   box-shadow: 0 1px 2px rgb(15 23 42 / 0.05), 0 4px 10px rgb(15 23 42 / 0.04);

@@ -2,14 +2,15 @@ import { profile } from '@/content/profile';
 import Section from '@/components/layout/Section';
 import Reveal from '@/components/ui/Reveal';
 import ContactForm from '@/components/sections/ContactForm';
+import { MailIcon, GitHubIcon, LinkedInIcon } from '@/components/ui/Icons';
 
 export default function Contact() {
   const { links, resume } = profile;
 
   const socials = [
-    { label: 'GitHub', value: links.githubLabel, href: links.github },
-    { label: 'LinkedIn', value: links.linkedinLabel, href: links.linkedin },
-    { label: 'Résumé', value: 'Download PDF', href: resume },
+    { label: 'GitHub', value: links.githubLabel, href: links.github, Icon: GitHubIcon },
+    { label: 'LinkedIn', value: links.linkedinLabel, href: links.linkedin, Icon: LinkedInIcon },
+    { label: 'Résumé', value: 'Download PDF', href: resume, Icon: null },
   ];
 
   return (
@@ -31,7 +32,9 @@ export default function Contact() {
               Available for new roles &amp; collaboration
             </span>
 
-            <p className="mt-8 font-mono text-xs uppercase tracking-wider text-faint">Email me directly</p>
+            <p className="mt-8 flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-faint">
+              <MailIcon size={13} /> Email me directly
+            </p>
             <a
               href={`mailto:${links.email}`}
               className="group mt-2 block break-all font-sans text-2xl font-semibold tracking-tight text-ink transition-colors hover:text-accent sm:text-3xl"
@@ -49,7 +52,10 @@ export default function Contact() {
                   rel="noopener noreferrer"
                   className="group bg-surface px-4 py-4 transition-colors hover:bg-surface2"
                 >
-                  <p className="font-mono text-xs uppercase tracking-wider text-faint">{s.label}</p>
+                  <p className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-faint">
+                    {s.Icon && <s.Icon size={13} />}
+                    {s.label}
+                  </p>
                   <p className="mt-1.5 flex items-center gap-1 font-mono text-sm text-ink">
                     <span className="truncate">{s.value}</span>
                     <span className="text-muted transition-colors group-hover:text-accent">↗</span>
