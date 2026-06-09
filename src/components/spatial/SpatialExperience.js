@@ -9,10 +9,6 @@ import { SectionMarker, Panel } from './Primitives';
 // Elevation profile — most recent role rises highest, like a section drawing.
 const ELEV = [132, 108, 88, 70, 54];
 
-function shortRole(role) {
-  return role.split(' - ')[0];
-}
-
 function DetailPanel({ entry }) {
   return (
     <AnimatePresence mode="wait">
@@ -113,8 +109,8 @@ function HorizontalTimeline({ selected, setSelected, reduce }) {
                 viewport={{ once: true, margin: '-100px' }}
                 transition={{ duration: 0.45, delay: base + 0.25, ease: [0.22, 1, 0.36, 1] }}
               >
-                <p className={`font-grotesk text-[13px] font-semibold leading-tight ${active ? 'text-white' : 'text-white/80'}`}>
-                  {shortRole(e.role)}
+                <p className={`font-grotesk text-[12.5px] font-semibold leading-snug ${active ? 'text-white' : 'text-white/80'}`}>
+                  {e.role}
                 </p>
                 <p className="mt-0.5 font-plex text-[11px] text-white/45">{e.org}</p>
               </motion.div>
@@ -197,7 +193,7 @@ function VerticalTimeline({ selected, setSelected, reduce }) {
                 transition={{ type: 'spring', stiffness: 380, damping: 18, delay: 0.2 + i * 0.1 }}
               />
               <span className={`font-grotesk text-sm font-medium ${active ? 'text-white' : 'text-white/70'}`}>
-                {shortRole(e.role)}
+                {e.role}
               </span>
               <span className="font-grotesk text-[10px] uppercase tracking-[0.12em] text-white/35">
                 {e.period.split(' - ')[0]}
