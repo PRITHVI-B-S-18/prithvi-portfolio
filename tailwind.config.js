@@ -18,6 +18,8 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
         mono: ['var(--font-geist-mono)', 'ui-monospace', 'monospace'],
+        grotesk: ['var(--font-space-grotesk)', 'system-ui', 'sans-serif'],
+        plex: ['var(--font-ibm-plex)', 'system-ui', 'sans-serif'],
       },
       keyframes: {
         'scroll-bounce': {

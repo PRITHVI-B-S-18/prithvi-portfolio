@@ -1,6 +1,7 @@
 import '@/styles/globals.css';
 import { useEffect } from 'react';
 import localFont from 'next/font/local';
+import { Space_Grotesk, IBM_Plex_Sans } from 'next/font/google';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import ScrollProgress from '@/components/ui/ScrollProgress';
@@ -21,6 +22,22 @@ const geistMono = localFont({
   display: 'swap',
 });
 
+// Spatial/blueprint type system: Space Grotesk (architectural headings) +
+// IBM Plex Sans (body). Consumed by the /spatial route via font-grotesk / font-plex.
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-space-grotesk',
+  display: 'swap',
+});
+
+const ibmPlex = IBM_Plex_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-ibm-plex',
+  display: 'swap',
+});
+
 export default function App({ Component, pageProps }) {
   const router = useRouter();
 
@@ -33,8 +50,9 @@ export default function App({ Component, pageProps }) {
   }, []);
 
   return (
-    <div className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
-      <ScrollProgress />
+    <div className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} ${ibmPlex.variable} font-sans`}>
+      {/* The editorial accent scroll bar would clash with the blue spatial theme. */}
+      {router.pathname !== '/spatial' && <ScrollProgress />}
       {/* Enter-only fade keyed by route. No exit animation, so navigating away
           replaces the page instantly (avoids the old page flashing at the top). */}
       <motion.div
