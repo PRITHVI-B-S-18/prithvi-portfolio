@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { projects } from '@/content/projects';
 import PerspectiveSection from './PerspectiveSection';
@@ -70,6 +71,8 @@ function ProjectCard({ project, index, onOpen }) {
 
 function ProjectModal({ project, onClose }) {
   const reduce = useReducedMotion();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   // Lock body scroll + close on Escape while open.
   useEffect(() => {
@@ -88,7 +91,12 @@ function ProjectModal({ project, onClose }) {
 
   const color = project ? statusColor[project.status] || '#94a3b8' : '#94a3b8';
 
-  return (
+  // Portal to <body> so the fixed overlay escapes the section's 3D transform
+  // (a fixed element inside a transformed ancestor is trapped by it, which
+  // broke the modal's internal scroll).
+  if (!mounted) return null;
+
+  return createPortal(
     <AnimatePresence>
       {project && (
         <motion.div
@@ -193,7 +201,8 @@ function ProjectModal({ project, onClose }) {
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }
 
