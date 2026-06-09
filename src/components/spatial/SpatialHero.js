@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { profile } from '@/content/profile';
+import { MailIcon, GitHubIcon, LinkedInIcon } from '@/components/ui/Icons';
 import { CornerTicks } from './Primitives';
 import MagneticButton from './MagneticButton';
 
@@ -11,7 +12,7 @@ import MagneticButton from './MagneticButton';
  * the technical-drawing language.
  */
 export default function SpatialHero() {
-  const { name, role, positioning, available, location, currentRole, portrait } = profile;
+  const { name, role, positioning, available, location, currentRole, portrait, links } = profile;
   const reduce = useReducedMotion();
   const ref = useRef(null);
 
@@ -131,6 +132,26 @@ export default function SpatialHero() {
             >
               Get in touch
             </MagneticButton>
+
+            {/* Social shortcuts */}
+            <div className="ml-1 flex items-center gap-2">
+              {[
+                { href: links.github, label: 'GitHub', Icon: GitHubIcon },
+                { href: links.linkedin, label: 'LinkedIn', Icon: LinkedInIcon },
+                { href: `mailto:${links.email}`, label: 'Email', Icon: MailIcon },
+              ].map(({ href, label, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target={href.startsWith('mailto') ? undefined : '_blank'}
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="flex h-11 w-11 items-center justify-center border border-white/12 text-white/60 transition-colors hover:border-[#3b82f6] hover:text-[#3b82f6]"
+                >
+                  <Icon size={17} />
+                </a>
+              ))}
+            </div>
           </motion.div>
 
           <motion.div {...rise(0.4)} className="relative mt-12 max-w-sm">

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { profile } from '@/content/profile';
 import Motto from '@/components/ui/Motto';
+import { MailIcon, GitHubIcon, LinkedInIcon } from '@/components/ui/Icons';
 import PerspectiveSection from './PerspectiveSection';
 import { SectionMarker } from './Primitives';
 import Reveal from './Reveal';
@@ -10,6 +11,7 @@ export default function SpatialContact() {
   const year = 2026;
 
   const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [copied, setCopied] = useState(false);
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
   const sendMail = (e) => {
@@ -19,10 +21,20 @@ export default function SpatialContact() {
     window.location.href = `mailto:${links.email}?subject=${subject}&body=${body}`;
   };
 
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(links.email);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      /* clipboard unavailable */
+    }
+  };
+
   const channels = [
-    { label: 'Email', value: links.email, href: `mailto:${links.email}` },
-    { label: 'GitHub', value: links.githubLabel, href: links.github },
-    { label: 'LinkedIn', value: links.linkedinLabel, href: links.linkedin },
+    { label: 'Email', value: links.email, href: `mailto:${links.email}`, Icon: MailIcon },
+    { label: 'GitHub', value: links.githubLabel, href: links.github, Icon: GitHubIcon },
+    { label: 'LinkedIn', value: links.linkedinLabel, href: links.linkedin, Icon: LinkedInIcon },
   ];
 
   const field =
@@ -44,18 +56,39 @@ export default function SpatialContact() {
           </p>
 
           <div className="mt-8 grid gap-px border border-white/10 bg-white/5">
-            {channels.map((c) => (
+            {channels.map(({ label, value, href, Icon }) => (
               <a
-                key={c.label}
-                href={c.href}
-                target={c.href.startsWith('mailto') ? undefined : '_blank'}
+                key={label}
+                href={href}
+                target={href.startsWith('mailto') ? undefined : '_blank'}
                 rel="noopener noreferrer"
-                className="group flex items-center justify-between bg-[#070713] px-5 py-3.5 transition-colors hover:bg-[#3b82f6]/[0.06]"
+                className="group flex items-center justify-between gap-4 bg-[#070713] px-5 py-3.5 transition-colors hover:bg-[#3b82f6]/[0.06]"
               >
-                <span className="font-grotesk text-[11px] uppercase tracking-[0.2em] text-white/45">{c.label}</span>
-                <span className="font-plex text-sm text-white/75 transition-colors group-hover:text-[#3b82f6]">{c.value} ↗</span>
+                <span className="flex items-center gap-3 font-grotesk text-[11px] uppercase tracking-[0.2em] text-white/45">
+                  <span className="text-white/55 transition-colors group-hover:text-[#3b82f6]">
+                    <Icon size={16} />
+                  </span>
+                  {label}
+                </span>
+                <span className="truncate font-plex text-sm text-white/75 transition-colors group-hover:text-[#3b82f6]">
+                  {value} <span aria-hidden="true">↗</span>
+                </span>
               </a>
             ))}
+            {/* Copy-email convenience */}
+            <button
+              type="button"
+              onClick={copyEmail}
+              className="group flex items-center justify-between gap-4 bg-[#070713] px-5 py-3.5 text-left transition-colors hover:bg-[#3b82f6]/[0.06]"
+            >
+              <span className="flex items-center gap-3 font-grotesk text-[11px] uppercase tracking-[0.2em] text-white/45">
+                <span className="text-white/55 transition-colors group-hover:text-[#3b82f6]" aria-hidden="true">⧉</span>
+                Copy email
+              </span>
+              <span className={`font-grotesk text-[11px] uppercase tracking-[0.16em] ${copied ? 'text-emerald-400' : 'text-white/75 group-hover:text-[#3b82f6]'}`}>
+                {copied ? 'Copied ✓' : links.email}
+              </span>
+            </button>
           </div>
         </Reveal>
 

@@ -15,6 +15,14 @@ const AXES = [
   { key: 'AUTOMATION', level: 0.9, items: ['n8n', 'Selenium', 'Git', 'Cursor', 'Claude Code'] },
 ];
 
+// Qualitative proficiency tier — meaningful categorisation instead of a
+// falsely-precise percentage. Driven by the same level that sizes the polygon.
+function tierOf(level) {
+  if (level >= 0.9) return 'CORE';
+  if (level >= 0.84) return 'STRONG';
+  return 'WORKING';
+}
+
 const CX = 220;
 const CY = 200;
 const R = 138;
@@ -136,9 +144,9 @@ export default function SpatialSkills() {
                 style={{ transformOrigin: `${dataPoints[active][0]}px ${dataPoints[active][1]}px` }}
               >
                 <rect
-                  x={dataPoints[active][0] - 22}
+                  x={dataPoints[active][0] - 34}
                   y={dataPoints[active][1] - 30}
-                  width="44"
+                  width="68"
                   height="20"
                   rx="2"
                   fill="#0b0b18"
@@ -151,10 +159,11 @@ export default function SpatialSkills() {
                   textAnchor="middle"
                   dominantBaseline="middle"
                   className="font-grotesk"
-                  fontSize="11"
+                  fontSize="10"
+                  letterSpacing="1.5"
                   fill="#60a5fa"
                 >
-                  {Math.round(AXES[active].level * 100)}%
+                  {tierOf(AXES[active].level)}
                 </text>
               </motion.g>
             )}
@@ -195,9 +204,11 @@ export default function SpatialSkills() {
               onMouseEnter={() => setActive(i)}
               onMouseLeave={() => setActive(null)}
             >
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-3">
                 <p className="font-grotesk text-xs uppercase tracking-[0.2em] text-white/55">{ax.key}</p>
-                <span className="font-grotesk text-[10px] text-[#3b82f6]">{Math.round(ax.level * 100)}</span>
+                <span className="shrink-0 border border-[#3b82f6]/40 px-1.5 py-0.5 font-grotesk text-[9px] uppercase tracking-[0.16em] text-[#60a5fa]">
+                  {tierOf(ax.level)}
+                </span>
               </div>
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {ax.items.map((it) => (
