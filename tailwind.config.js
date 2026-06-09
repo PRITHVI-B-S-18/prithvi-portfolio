@@ -18,6 +18,15 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
         mono: ['var(--font-geist-mono)', 'ui-monospace', 'monospace'],
+        terminal: ['var(--font-jetbrains-mono)', 'ui-monospace', 'monospace'],
+      },
+      colors: {
+        phosphor: '#00ff88',
+        term: {
+          bg: '#0a0a0a',
+          fg: '#e2e8f0',
+          dim: '#6b7280',
+        },
       },
       keyframes: {
         'scroll-bounce': {

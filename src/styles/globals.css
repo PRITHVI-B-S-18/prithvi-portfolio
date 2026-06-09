@@ -148,3 +148,76 @@ body::after {
     animation: none !important;
   }
 }
+
+/* ============================================================
+   Terminal / hacker aesthetic — scoped to the /terminal route.
+   ============================================================ */
+
+/* Block cursor that blinks on step (mechanical, no fade). */
+@keyframes term-blink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+.term-cursor::after {
+  content: '\2588'; /* full block */
+  margin-left: 1px;
+  animation: term-blink 1s step-end infinite;
+}
+.term-caret {
+  display: inline-block;
+  width: 0.6em;
+  height: 1.05em;
+  margin-left: 2px;
+  background: #00ff88;
+  vertical-align: text-bottom;
+  animation: term-blink 1s step-end infinite;
+}
+
+/* Barely-there scanline overlay for headings (atmospheric only). */
+.term-scanlines {
+  position: relative;
+}
+.term-scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.05) 0px,
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* Full-screen CRT scanline veil for the whole terminal page. */
+.term-crt::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.22) 3px,
+    rgba(0, 0, 0, 0) 4px
+  );
+}
+.term-crt::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 41;
+  pointer-events: none;
+  background: radial-gradient(ellipse 100% 90% at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.5) 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .term-cursor::after,
+  .term-caret {
+    animation: none;
+  }
+}

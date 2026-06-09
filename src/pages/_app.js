@@ -1,6 +1,7 @@
 import '@/styles/globals.css';
 import { useEffect } from 'react';
 import localFont from 'next/font/local';
+import { JetBrains_Mono } from 'next/font/google';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import ScrollProgress from '@/components/ui/ScrollProgress';
@@ -21,6 +22,14 @@ const geistMono = localFont({
   display: 'swap',
 });
 
+// Terminal/hacker aesthetic: JetBrains Mono for every element on the /terminal route.
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  variable: '--font-jetbrains-mono',
+  display: 'swap',
+});
+
 export default function App({ Component, pageProps }) {
   const router = useRouter();
 
@@ -33,8 +42,9 @@ export default function App({ Component, pageProps }) {
   }, []);
 
   return (
-    <div className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
-      <ScrollProgress />
+    <div className={`${geistSans.variable} ${geistMono.variable} ${jetbrainsMono.variable} font-sans`}>
+      {/* No editorial scroll bar on the terminal route — it has its own chrome. */}
+      {router.pathname !== '/terminal' && <ScrollProgress />}
       {/* Enter-only fade keyed by route. No exit animation, so navigating away
           replaces the page instantly (avoids the old page flashing at the top). */}
       <motion.div
