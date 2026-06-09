@@ -212,7 +212,9 @@ function VerticalTimeline({ selected, setSelected, reduce }) {
 
 export default function SpatialExperience() {
   const [selected, setSelected] = useState(0);
-  const { isDesktop, mounted } = useIsDesktop();
+  // Horizontal section-drawing only at lg+; tablet/mobile get the cleaner
+  // vertical ruled timeline (5 roles side-by-side is too cramped below 1024).
+  const { isDesktop, mounted } = useIsDesktop('(min-width: 1024px)');
   const reduce = useReducedMotionPref();
   const useHorizontal = mounted && isDesktop;
 

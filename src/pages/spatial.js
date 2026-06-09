@@ -5,9 +5,8 @@ import SpatialNav from '@/components/spatial/SpatialNav';
 import PerspectiveGrid from '@/components/spatial/PerspectiveGrid';
 import SpatialHero from '@/components/spatial/SpatialHero';
 
-// Client-only interface chrome — no SSR needed (they read window/pointer).
+// Client-only interface chrome — no SSR needed (reads window/pointer).
 const BootSequence = dynamic(() => import('@/components/spatial/BootSequence'), { ssr: false });
-const TelemetryHUD = dynamic(() => import('@/components/spatial/TelemetryHUD'), { ssr: false });
 
 // Below-fold sections are code-split so the initial bundle stays minimal.
 // ssr stays on so content is in the static HTML (SEO + no layout shift).
@@ -49,9 +48,8 @@ export default function Spatial() {
         <meta name="theme-color" content="#050510" />
       </Head>
 
-      {/* Boot overlay + instrument chrome */}
+      {/* Boot overlay */}
       <BootSequence />
-      <TelemetryHUD />
 
       {/* Background layer (z:-1) */}
       <PerspectiveGrid />
