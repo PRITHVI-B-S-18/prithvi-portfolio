@@ -98,6 +98,13 @@ body::after {
   outline-offset: 2px;
 }
 
+/* Spatial route: keyboard focus rings in the blueprint blue, not the
+   editorial accent. */
+.spatial-root :focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
 /* Dark scrollbar */
 ::-webkit-scrollbar {
   width: 10px;

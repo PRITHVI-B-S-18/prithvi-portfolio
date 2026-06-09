@@ -60,7 +60,7 @@ export default function SpatialPage() {
 
       <SpatialProgress />
 
-      <div className="relative min-h-screen font-plex text-white antialiased">
+      <div className="spatial-root relative min-h-screen font-plex text-white antialiased">
         <SpatialNav />
         <main>
           <SpatialHero />

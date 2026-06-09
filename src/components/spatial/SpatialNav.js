@@ -47,6 +47,26 @@ export default function SpatialNav() {
     return () => observer.disconnect();
   }, []);
 
+  // Keyboard navigation — press 1–5 to jump to a section, 0/H for the top.
+  // Instrument-like shortcut; ignored while typing in a field.
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const tag = (e.target.tagName || '').toUpperCase();
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable) return;
+      const n = Number.parseInt(e.key, 10);
+      let id = null;
+      if (n >= 1 && n <= links.length) id = links[n - 1].id;
+      else if (e.key === '0' || e.key.toLowerCase() === 'h') id = 'top';
+      if (id) {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
   return (
     <>
       <header
@@ -66,16 +86,17 @@ export default function SpatialNav() {
 
           <div className="hidden items-center gap-8 md:flex">
             <ul className="flex gap-7">
-              {links.map((l) => {
+              {links.map((l, i) => {
                 const isActive = active === l.id;
                 return (
                   <li key={l.href}>
                     <a
                       href={l.href}
-                      className={`relative font-grotesk text-xs uppercase tracking-[0.18em] transition-colors ${
+                      className={`relative inline-flex items-baseline gap-1.5 font-grotesk text-xs uppercase tracking-[0.18em] transition-colors ${
                         isActive ? 'text-[#3b82f6]' : 'text-white/55 hover:text-white'
                       }`}
                     >
+                      <span className={`text-[9px] ${isActive ? 'text-[#3b82f6]' : 'text-white/30'}`}>{`0${i + 1}`}</span>
                       {l.label}
                       {isActive && (
                         <motion.span
