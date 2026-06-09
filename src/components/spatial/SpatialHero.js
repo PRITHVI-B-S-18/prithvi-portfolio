@@ -191,40 +191,12 @@ export default function SpatialHero() {
                 priority
                 className="h-auto w-full object-cover"
               />
-
-              {/* Duotone veil — subtle blue cast + bottom depth, no grid */}
+              {/* Subtle bottom grounding gradient — clean, professional */}
               <div
-                className="pointer-events-none absolute inset-0 mix-blend-soft-light"
-                style={{ background: 'linear-gradient(160deg, rgba(59,130,246,0.18), transparent 45%)' }}
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4"
+                style={{ background: 'linear-gradient(to top, rgba(5,5,16,0.45), transparent)' }}
                 aria-hidden="true"
               />
-              <div
-                className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
-                style={{ background: 'linear-gradient(to top, rgba(5,5,16,0.55), transparent)' }}
-                aria-hidden="true"
-              />
-
-              {/* Scanning beam — a soft accent line sweeps down, like the
-                  portrait is being read by an instrument */}
-              {!reduce && (
-                <motion.div
-                  className="pointer-events-none absolute inset-x-0 h-10"
-                  style={{
-                    background:
-                      'linear-gradient(to bottom, transparent, rgba(96,165,250,0.14) 60%, rgba(96,165,250,0.5) 100%)',
-                    borderBottom: '1px solid rgba(120,180,255,0.85)',
-                  }}
-                  initial={{ top: '-12%' }}
-                  animate={{ top: ['-12%', '112%'] }}
-                  transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut', repeatDelay: 1.5 }}
-                  aria-hidden="true"
-                />
-              )}
-
-              {/* Inner targeting ticks — viewfinder corners */}
-              {['left-2 top-2 border-l border-t', 'right-2 top-2 border-r border-t', 'left-2 bottom-2 border-l border-b', 'right-2 bottom-2 border-r border-b'].map((pos) => (
-                <span key={pos} className={`pointer-events-none absolute h-3 w-3 border-white/40 ${pos}`} aria-hidden="true" />
-              ))}
             </div>
           </div>
         </motion.div>

@@ -163,17 +163,17 @@ export default function SpatialContact() {
               <div className="mt-5 space-y-3">
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div>
-                    <label className="mb-1.5 block font-grotesk text-[10px] uppercase tracking-[0.18em] text-white/40">Name</label>
-                    <input className={field} type="text" value={form.name} onChange={set('name')} placeholder="Your name" required />
+                    <label htmlFor="c-name" className="mb-1.5 block font-grotesk text-[10px] uppercase tracking-[0.18em] text-white/40">Name</label>
+                    <input id="c-name" name="name" autoComplete="name" className={field} type="text" value={form.name} onChange={set('name')} placeholder="Your name" required />
                   </div>
                   <div>
-                    <label className="mb-1.5 block font-grotesk text-[10px] uppercase tracking-[0.18em] text-white/40">Email</label>
-                    <input className={field} type="email" value={form.email} onChange={set('email')} placeholder="you@email.com" required />
+                    <label htmlFor="c-email" className="mb-1.5 block font-grotesk text-[10px] uppercase tracking-[0.18em] text-white/40">Email</label>
+                    <input id="c-email" name="email" autoComplete="email" className={field} type="email" value={form.email} onChange={set('email')} placeholder="you@email.com" required />
                   </div>
                 </div>
                 <div>
-                  <label className="mb-1.5 block font-grotesk text-[10px] uppercase tracking-[0.18em] text-white/40">Message</label>
-                  <textarea className={`${field} resize-none`} rows={4} value={form.message} onChange={set('message')} placeholder="What would you like to build?" required />
+                  <label htmlFor="c-message" className="mb-1.5 block font-grotesk text-[10px] uppercase tracking-[0.18em] text-white/40">Message</label>
+                  <textarea id="c-message" name="message" className={`${field} resize-none`} rows={4} value={form.message} onChange={set('message')} placeholder="What would you like to build?" required />
                 </div>
               </div>
               <button
