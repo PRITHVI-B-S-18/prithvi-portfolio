@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import SpatialNav from '@/components/spatial/SpatialNav';
+import SpatialProgress from '@/components/spatial/SpatialProgress';
 import PerspectiveGrid from '@/components/spatial/PerspectiveGrid';
 import SpatialHero from '@/components/spatial/SpatialHero';
 
@@ -56,6 +57,8 @@ export default function SpatialPage() {
 
       {/* Background layer (z:-1) */}
       <PerspectiveGrid />
+
+      <SpatialProgress />
 
       <div className="relative min-h-screen font-plex text-white antialiased">
         <SpatialNav />

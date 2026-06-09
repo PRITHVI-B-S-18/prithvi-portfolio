@@ -12,12 +12,11 @@ const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY || '7c602e90-f719-4f90-
 const configured = ACCESS_KEY && ACCESS_KEY !== 'your-web3forms-access-key';
 
 export default function SpatialContact() {
-  const { links, name, role, available } = profile;
+  const { links, name, role, available, resume } = profile;
   const year = 2026;
 
   const [form, setForm] = useState({ name: '', email: '', message: '', botcheck: '' });
   const [status, setStatus] = useState('idle'); // idle | sending | success | error
-  const [copied, setCopied] = useState(false);
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
   const onSubmit = async (e) => {
@@ -58,20 +57,11 @@ export default function SpatialContact() {
     }
   };
 
-  const copyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText(links.email);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1800);
-    } catch {
-      /* clipboard unavailable */
-    }
-  };
-
   const channels = [
-    { label: 'Email', value: links.email, href: `mailto:${links.email}`, Icon: MailIcon },
-    { label: 'GitHub', value: links.githubLabel, href: links.github, Icon: GitHubIcon },
-    { label: 'LinkedIn', value: links.linkedinLabel, href: links.linkedin, Icon: LinkedInIcon },
+    { label: 'Email', value: links.email, href: `mailto:${links.email}`, Icon: MailIcon, mark: '↗' },
+    { label: 'GitHub', value: links.githubLabel, href: links.github, Icon: GitHubIcon, mark: '↗' },
+    { label: 'LinkedIn', value: links.linkedinLabel, href: links.linkedin, Icon: LinkedInIcon, mark: '↗' },
+    { label: 'Résumé', value: 'Download PDF', href: resume, Icon: null, mark: '↓' },
   ];
 
   const field =
@@ -93,7 +83,7 @@ export default function SpatialContact() {
           </p>
 
           <div className="mt-8 grid gap-px border border-white/10 bg-white/5">
-            {channels.map(({ label, value, href, Icon }) => (
+            {channels.map(({ label, value, href, Icon, mark }) => (
               <a
                 key={label}
                 href={href}
@@ -102,30 +92,16 @@ export default function SpatialContact() {
                 className="group flex items-center justify-between gap-4 bg-[#070713] px-5 py-3.5 transition-colors hover:bg-[#3b82f6]/[0.06]"
               >
                 <span className="flex items-center gap-3 font-grotesk text-[11px] uppercase tracking-[0.2em] text-white/45">
-                  <span className="text-white/55 transition-colors group-hover:text-[#3b82f6]">
-                    <Icon size={16} />
+                  <span className="flex h-4 w-4 items-center justify-center text-white/55 transition-colors group-hover:text-[#3b82f6]">
+                    {Icon ? <Icon size={16} /> : <span aria-hidden="true">▤</span>}
                   </span>
                   {label}
                 </span>
                 <span className="truncate font-plex text-sm text-white/75 transition-colors group-hover:text-[#3b82f6]">
-                  {value} <span aria-hidden="true">↗</span>
+                  {value} <span aria-hidden="true">{mark}</span>
                 </span>
               </a>
             ))}
-            {/* Copy-email convenience */}
-            <button
-              type="button"
-              onClick={copyEmail}
-              className="group flex items-center justify-between gap-4 bg-[#070713] px-5 py-3.5 text-left transition-colors hover:bg-[#3b82f6]/[0.06]"
-            >
-              <span className="flex items-center gap-3 font-grotesk text-[11px] uppercase tracking-[0.2em] text-white/45">
-                <span className="text-white/55 transition-colors group-hover:text-[#3b82f6]" aria-hidden="true">⧉</span>
-                Copy email
-              </span>
-              <span className={`font-grotesk text-[11px] uppercase tracking-[0.16em] ${copied ? 'text-emerald-400' : 'text-white/75 group-hover:text-[#3b82f6]'}`}>
-                {copied ? 'Copied ✓' : links.email}
-              </span>
-            </button>
           </div>
         </Reveal>
 

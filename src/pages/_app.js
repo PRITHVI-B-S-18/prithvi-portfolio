@@ -52,7 +52,8 @@ export default function App({ Component, pageProps }) {
   return (
     <div className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} ${ibmPlex.variable} font-sans`}>
       {/* The editorial accent scroll bar would clash with the blue spatial theme. */}
-      {router.pathname !== '/spatial' && <ScrollProgress />}
+      {/* Spatial routes ('/' and '/spatial') have their own blue progress bar. */}
+      {!['/', '/spatial'].includes(router.pathname) && <ScrollProgress />}
       {/* Enter-only fade keyed by route. No exit animation, so navigating away
           replaces the page instantly (avoids the old page flashing at the top). */}
       <motion.div
