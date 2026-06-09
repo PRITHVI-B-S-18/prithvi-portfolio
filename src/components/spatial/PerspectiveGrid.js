@@ -26,10 +26,12 @@ export default function PerspectiveGrid() {
 
   return (
     <div ref={ref} className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-[#050510]">
-      {/* Distant glow at the vanishing point */}
-      <div
+      {/* Distant glow at the vanishing point — breathes slowly for living depth */}
+      <motion.div
         className="absolute left-1/2 top-1/2 h-[60vh] w-[60vh] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[120px]"
         style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.14), transparent 70%)' }}
+        animate={reduce ? undefined : { scale: [1, 1.12, 1], opacity: [0.85, 1, 0.85] }}
+        transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
       />
 
       {/* Floor grid — receding plane anchored at the bottom */}

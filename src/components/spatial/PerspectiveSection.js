@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import useIsDesktop from '@/lib/useIsDesktop';
 import useReducedMotionPref from '@/lib/useReducedMotionPref';
 
@@ -23,10 +23,14 @@ export default function PerspectiveSection({ id, children, className = '', lift 
     offset: ['start end', 'start 38%'],
   });
 
-  const rotateX = useTransform(scrollYProgress, [0, 1], [lift, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [0.95, 1]);
-  const y = useTransform(scrollYProgress, [0, 1], [40, 0]);
-  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  // Spring-smooth the scroll progress so sections arrive with weight — like
+  // walking up to them — instead of tracking the scrollbar 1:1.
+  const progress = useSpring(scrollYProgress, { stiffness: 90, damping: 24, mass: 0.6 });
+
+  const rotateX = useTransform(progress, [0, 1], [lift, 0]);
+  const scale = useTransform(progress, [0, 1], [0.95, 1]);
+  const y = useTransform(progress, [0, 1], [40, 0]);
+  const opacity = useTransform(progress, [0, 1], [0, 1]);
 
   // scroll-mt clears the fixed header so anchor jumps land below it, not under it.
   const cls = `scroll-mt-24 ${className}`;

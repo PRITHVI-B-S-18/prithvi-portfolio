@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { experience } from '@/content/experience';
 import useIsDesktop from '@/lib/useIsDesktop';
+import useReducedMotionPref from '@/lib/useReducedMotionPref';
 import PerspectiveSection from './PerspectiveSection';
 import { SectionMarker, Panel } from './Primitives';
 
@@ -62,26 +63,39 @@ function DetailPanel({ entry }) {
 }
 
 /** Desktop: horizontal section drawing. Roles rise from a ruled baseline. */
-function HorizontalTimeline({ selected, setSelected }) {
+function HorizontalTimeline({ selected, setSelected, reduce }) {
   return (
     <div className="relative mt-16 pb-4" style={{ height: 200 }}>
-      {/* Ruled baseline with measurement ticks */}
+      {/* Ruled baseline draws in left-to-right as the section is reached */}
       <div className="absolute inset-x-0" style={{ bottom: 56 }}>
-        <div className="relative h-px w-full bg-white/15">
+        <motion.div
+          className="relative h-px w-full origin-left bg-white/15"
+          initial={reduce ? false : { scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        >
           {Array.from({ length: 41 }).map((_, i) => (
-            <span
+            <motion.span
               key={i}
               className="absolute top-0 w-px bg-white/15"
               style={{ left: `${(i / 40) * 100}%`, height: i % 5 === 0 ? 7 : 4 }}
+              initial={reduce ? false : { opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.3, delay: 0.3 + (i / 40) * 0.5 }}
             />
           ))}
-        </div>
+        </motion.div>
       </div>
 
       <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3">
         {experience.map((e, i) => {
           const active = i === selected;
           const h = ELEV[i] ?? 54;
+          // Each waypoint constructs as the baseline reaches it: node pops,
+          // riser grows upward, card and date fade in.
+          const base = 0.5 + i * 0.13;
           return (
             <button
               key={e.period}
@@ -90,33 +104,54 @@ function HorizontalTimeline({ selected, setSelected }) {
               className="group flex flex-1 flex-col items-center text-center"
             >
               {/* Elevation card */}
-              <div
+              <motion.div
                 className={`w-full max-w-[200px] border px-3 py-2.5 transition-colors ${
                   active ? 'border-[#3b82f6] bg-[#3b82f6]/[0.07]' : 'border-white/12 bg-[#070713] group-hover:border-white/30'
                 }`}
+                initial={reduce ? false : { opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.45, delay: base + 0.25, ease: [0.22, 1, 0.36, 1] }}
               >
                 <p className={`font-grotesk text-[13px] font-semibold leading-tight ${active ? 'text-white' : 'text-white/80'}`}>
                   {shortRole(e.role)}
                 </p>
                 <p className="mt-0.5 font-plex text-[11px] text-white/45">{e.org}</p>
-              </div>
+              </motion.div>
 
-              {/* Riser with ticks (the elevation measure) */}
-              <div className="relative w-px bg-white/15" style={{ height: h }}>
+              {/* Riser with ticks (the elevation measure) — grows up from the baseline */}
+              <motion.div
+                className="relative w-px origin-bottom bg-white/15"
+                style={{ height: h }}
+                initial={reduce ? false : { scaleY: 0 }}
+                whileInView={{ scaleY: 1 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.4, delay: base + 0.1, ease: [0.22, 1, 0.36, 1] }}
+              >
                 <span className={`absolute inset-0 ${active ? 'bg-[#3b82f6]' : 'bg-transparent'}`} />
-              </div>
+              </motion.div>
 
               {/* Baseline node */}
-              <span
+              <motion.span
                 className={`relative z-10 -mt-[5px] h-2.5 w-2.5 rotate-45 border transition-colors ${
                   active ? 'border-[#3b82f6] bg-[#3b82f6]' : 'border-white/40 bg-[#050510] group-hover:border-white'
                 }`}
+                initial={reduce ? false : { scale: 0 }}
+                whileInView={{ scale: 1 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ type: 'spring', stiffness: 380, damping: 18, delay: base }}
               />
 
               {/* Date below the baseline — elevation marker */}
-              <span className={`mt-3 font-grotesk text-[10px] uppercase tracking-[0.12em] ${active ? 'text-[#3b82f6]' : 'text-white/40'}`}>
+              <motion.span
+                className={`mt-3 font-grotesk text-[10px] uppercase tracking-[0.12em] ${active ? 'text-[#3b82f6]' : 'text-white/40'}`}
+                initial={reduce ? false : { opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.4, delay: base + 0.2 }}
+              >
                 {e.period.split(' - ')[0]}
-              </span>
+              </motion.span>
             </button>
           );
         })}
@@ -125,25 +160,41 @@ function HorizontalTimeline({ selected, setSelected }) {
   );
 }
 
-/** Mobile: vertical ruled timeline. */
-function VerticalTimeline({ selected, setSelected }) {
+/** Mobile: vertical ruled timeline. The construction line draws downward. */
+function VerticalTimeline({ selected, setSelected, reduce }) {
   return (
     <div className="relative mt-10 pl-6">
-      <span className="absolute left-[3px] top-1 h-full w-px bg-white/12" aria-hidden="true" />
+      <motion.span
+        className="absolute left-[3px] top-1 w-px origin-top bg-white/12"
+        style={{ height: 'calc(100% - 0.5rem)' }}
+        aria-hidden="true"
+        initial={reduce ? false : { scaleY: 0 }}
+        whileInView={{ scaleY: 1 }}
+        viewport={{ once: true, margin: '-60px' }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      />
       <div className="space-y-2">
         {experience.map((e, i) => {
           const active = i === selected;
           return (
-            <button
+            <motion.button
               key={e.period}
               type="button"
               onClick={() => setSelected(i)}
               className="group relative flex w-full items-center gap-3 py-2 text-left"
+              initial={reduce ? false : { opacity: 0, x: -12 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.4, delay: 0.15 + i * 0.1 }}
             >
-              <span
+              <motion.span
                 className={`absolute -left-6 h-2 w-2 rotate-45 border ${
                   active ? 'border-[#3b82f6] bg-[#3b82f6]' : 'border-white/40 bg-[#050510]'
                 }`}
+                initial={reduce ? false : { scale: 0 }}
+                whileInView={{ scale: 1 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ type: 'spring', stiffness: 380, damping: 18, delay: 0.2 + i * 0.1 }}
               />
               <span className={`font-grotesk text-sm font-medium ${active ? 'text-white' : 'text-white/70'}`}>
                 {shortRole(e.role)}
@@ -151,7 +202,7 @@ function VerticalTimeline({ selected, setSelected }) {
               <span className="font-grotesk text-[10px] uppercase tracking-[0.12em] text-white/35">
                 {e.period.split(' - ')[0]}
               </span>
-            </button>
+            </motion.button>
           );
         })}
       </div>
@@ -162,6 +213,7 @@ function VerticalTimeline({ selected, setSelected }) {
 export default function SpatialExperience() {
   const [selected, setSelected] = useState(0);
   const { isDesktop, mounted } = useIsDesktop();
+  const reduce = useReducedMotionPref();
   const useHorizontal = mounted && isDesktop;
 
   return (
@@ -169,9 +221,9 @@ export default function SpatialExperience() {
       <SectionMarker index="02" label="Experience — Section Drawing" />
 
       {useHorizontal ? (
-        <HorizontalTimeline selected={selected} setSelected={setSelected} />
+        <HorizontalTimeline selected={selected} setSelected={setSelected} reduce={reduce} />
       ) : (
-        <VerticalTimeline selected={selected} setSelected={setSelected} />
+        <VerticalTimeline selected={selected} setSelected={setSelected} reduce={reduce} />
       )}
 
       <div className="mt-8">

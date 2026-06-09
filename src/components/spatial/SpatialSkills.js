@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import useReducedMotionPref from '@/lib/useReducedMotionPref';
 import PerspectiveSection from './PerspectiveSection';
 import { SectionMarker } from './Primitives';
 
@@ -40,9 +41,14 @@ function anchorFor(angleDeg) {
 
 export default function SpatialSkills() {
   const [active, setActive] = useState(null);
+  const reduce = useReducedMotionPref();
 
   const dataPoints = AXES.map((ax, i) => pt(ANGLES[i], R * ax.level));
   const dataPolygon = dataPoints.map((p) => p.join(',')).join(' ');
+
+  // Reveal the instrument in stages: rings sweep out, spokes draw, polygon
+  // traces its outline, vertices pop, labels fade. Mirrors how a HUD boots up.
+  const view = { once: true, margin: '-80px' };
 
   return (
     <PerspectiveSection id="skills" className="mx-auto max-w-6xl px-6 py-16 md:py-28" lift={8}>
@@ -52,53 +58,112 @@ export default function SpatialSkills() {
         {/* Hand-coded SVG radar */}
         <div className="mx-auto w-full max-w-[440px]">
           <svg viewBox="0 0 440 400" className="w-full" role="img" aria-label="Skill capability radar">
-            {/* Concentric hex rings */}
-            {RINGS.map((ring) => (
-              <polygon
+            {/* Concentric hex rings — scale outward from the center, one by one */}
+            {RINGS.map((ring, ri) => (
+              <motion.polygon
                 key={ring}
                 points={hexPoints(R * ring)}
                 fill="none"
                 stroke="rgba(255,255,255,0.10)"
                 strokeWidth="1"
+                style={{ transformOrigin: `${CX}px ${CY}px` }}
+                initial={reduce ? false : { scale: 0, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                viewport={view}
+                transition={{ duration: 0.5, delay: 0.1 + ri * 0.1, ease: [0.22, 1, 0.36, 1] }}
               />
             ))}
 
-            {/* Spokes */}
+            {/* Spokes — draw outward from the hub */}
             {ANGLES.map((ang, i) => {
               const [x, y] = pt(ang, R);
-              return <line key={i} x1={CX} y1={CY} x2={x} y2={y} stroke="rgba(255,255,255,0.10)" strokeWidth="1" />;
+              return (
+                <motion.line
+                  key={i}
+                  x1={CX}
+                  y1={CY}
+                  x2={x}
+                  y2={y}
+                  stroke="rgba(255,255,255,0.10)"
+                  strokeWidth="1"
+                  initial={reduce ? false : { pathLength: 0, opacity: 0 }}
+                  whileInView={{ pathLength: 1, opacity: 1 }}
+                  viewport={view}
+                  transition={{ duration: 0.5, delay: 0.5 + i * 0.05 }}
+                />
+              );
             })}
 
-            {/* Data polygon (animates in from the center) */}
-            <motion.g
-              style={{ transformOrigin: `${CX}px ${CY}px` }}
-              initial={{ scale: 0.2, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <polygon points={dataPolygon} fill="rgba(59,130,246,0.16)" stroke="#3b82f6" strokeWidth="1.5" />
-              {dataPoints.map((p, i) => {
-                const on = active === i;
-                return (
-                  <circle
-                    key={i}
-                    cx={p[0]}
-                    cy={p[1]}
-                    r={on ? 5 : 3}
-                    fill={on ? '#60a5fa' : '#3b82f6'}
-                    stroke="#050510"
-                    strokeWidth="1.5"
-                  />
-                );
-              })}
-            </motion.g>
+            {/* Data polygon outline traces itself, then fills */}
+            <motion.polygon
+              points={dataPolygon}
+              fill="rgba(59,130,246,0.16)"
+              stroke="#3b82f6"
+              strokeWidth="1.5"
+              initial={reduce ? false : { pathLength: 0, fillOpacity: 0 }}
+              whileInView={{ pathLength: 1, fillOpacity: 1 }}
+              viewport={view}
+              transition={{ pathLength: { duration: 1, delay: 0.9, ease: 'easeInOut' }, fillOpacity: { duration: 0.6, delay: 1.6 } }}
+            />
+
+            {/* Vertices pop in after the outline closes */}
+            {dataPoints.map((p, i) => {
+              const on = active === i;
+              return (
+                <motion.circle
+                  key={i}
+                  cx={p[0]}
+                  cy={p[1]}
+                  r={on ? 5.5 : 3}
+                  fill={on ? '#60a5fa' : '#3b82f6'}
+                  stroke="#050510"
+                  strokeWidth="1.5"
+                  initial={reduce ? false : { scale: 0, opacity: 0 }}
+                  whileInView={{ scale: 1, opacity: 1 }}
+                  viewport={view}
+                  transition={{ duration: 0.3, delay: reduce ? 0 : 1.5 + i * 0.06 }}
+                  style={{ transformOrigin: `${p[0]}px ${p[1]}px`, transition: 'r 0.2s ease' }}
+                />
+              );
+            })}
+
+            {/* Hover proficiency overlay — reads out the level at the vertex */}
+            {active !== null && (
+              <motion.g
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.2 }}
+                style={{ transformOrigin: `${dataPoints[active][0]}px ${dataPoints[active][1]}px` }}
+              >
+                <rect
+                  x={dataPoints[active][0] - 22}
+                  y={dataPoints[active][1] - 30}
+                  width="44"
+                  height="20"
+                  rx="2"
+                  fill="#0b0b18"
+                  stroke="#3b82f6"
+                  strokeWidth="1"
+                />
+                <text
+                  x={dataPoints[active][0]}
+                  y={dataPoints[active][1] - 20}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  className="font-grotesk"
+                  fontSize="11"
+                  fill="#60a5fa"
+                >
+                  {Math.round(AXES[active].level * 100)}%
+                </text>
+              </motion.g>
+            )}
 
             {/* Axis labels */}
             {AXES.map((ax, i) => {
               const [x, y] = pt(ANGLES[i], R + 22);
               return (
-                <text
+                <motion.text
                   key={ax.key}
                   x={x}
                   y={y}
@@ -108,9 +173,13 @@ export default function SpatialSkills() {
                   fontSize="11"
                   letterSpacing="1.5"
                   fill={active === i ? '#60a5fa' : 'rgba(255,255,255,0.55)'}
+                  initial={reduce ? false : { opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={view}
+                  transition={{ duration: 0.4, delay: 1.7 + i * 0.05 }}
                 >
                   {ax.key}
-                </text>
+                </motion.text>
               );
             })}
           </svg>

@@ -30,6 +30,37 @@ export default function SpatialHero() {
 
   return (
     <section id="top" ref={ref} className="relative flex min-h-[100svh] items-center">
+      {/* Blueprint alignment guides — draw themselves in like a drafting setup */}
+      {!reduce && (
+        <div className="pointer-events-none absolute inset-0 hidden lg:block" aria-hidden="true">
+          <motion.div
+            className="absolute left-[8%] top-0 h-full w-px origin-top bg-[#3b82f6]/15"
+            initial={{ scaleY: 0 }}
+            animate={{ scaleY: 1 }}
+            transition={{ duration: 1.1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          />
+          <motion.div
+            className="absolute right-[12%] top-0 h-full w-px origin-bottom bg-[#3b82f6]/10"
+            initial={{ scaleY: 0 }}
+            animate={{ scaleY: 1 }}
+            transition={{ duration: 1.1, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          />
+          <motion.div
+            className="absolute inset-x-0 top-[28%] h-px origin-left bg-white/[0.06]"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 1.3, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          />
+          {/* corner coordinate marker */}
+          <motion.span
+            className="absolute left-[8%] top-[28%] -ml-1 -mt-1 h-2 w-2 rounded-full bg-[#3b82f6]"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 16, delay: 1.4 }}
+          />
+        </div>
+      )}
+
       <motion.div
         style={{ opacity: fade }}
         className="mx-auto grid w-full max-w-6xl items-center gap-10 px-6 pt-28 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 lg:pt-20"
