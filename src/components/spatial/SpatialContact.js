@@ -6,19 +6,56 @@ import PerspectiveSection from './PerspectiveSection';
 import { SectionMarker } from './Primitives';
 import Reveal from './Reveal';
 
+// Free, no-backend delivery via Web3Forms (same key as the main site). The key
+// is public by design — it only routes mail to the registered address.
+const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY || '7c602e90-f719-4f90-a46d-3c07719ea40e';
+const configured = ACCESS_KEY && ACCESS_KEY !== 'your-web3forms-access-key';
+
 export default function SpatialContact() {
   const { links, name, role, available } = profile;
   const year = 2026;
 
-  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', message: '', botcheck: '' });
+  const [status, setStatus] = useState('idle'); // idle | sending | success | error
   const [copied, setCopied] = useState(false);
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  const sendMail = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Portfolio — message from ${form.name || 'someone'}`);
-    const body = encodeURIComponent(`${form.message}\n\n— ${form.name}${form.email ? ` (${form.email})` : ''}`);
-    window.location.href = `mailto:${links.email}?subject=${subject}&body=${body}`;
+
+    // Fallback to the mail client if no key is configured.
+    if (!configured) {
+      const subject = encodeURIComponent(`Portfolio — message from ${form.name || 'someone'}`);
+      const body = encodeURIComponent(`${form.message}\n\n— ${form.name}${form.email ? ` (${form.email})` : ''}`);
+      window.location.href = `mailto:${links.email}?subject=${subject}&body=${body}`;
+      return;
+    }
+
+    setStatus('sending');
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: ACCESS_KEY,
+          subject: `Portfolio message from ${form.name}`,
+          from_name: form.name,
+          name: form.name,
+          email: form.email,
+          message: form.message,
+          botcheck: form.botcheck || '',
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setStatus('success');
+        setForm({ name: '', email: '', message: '', botcheck: '' });
+      } else {
+        setStatus('error');
+      }
+    } catch {
+      setStatus('error');
+    }
   };
 
   const copyEmail = async () => {
@@ -92,35 +129,70 @@ export default function SpatialContact() {
           </div>
         </Reveal>
 
-        {/* Direct message form */}
+        {/* Direct message form — delivered via Web3Forms */}
         <Reveal delay={0.1}>
-          <form onSubmit={sendMail} className="relative border border-white/10 bg-[#070713] p-6 sm:p-8">
-            <p className="font-grotesk text-[10px] uppercase tracking-[0.3em] text-white/40">Direct message</p>
-            <div className="mt-5 space-y-3">
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div>
-                  <label className="mb-1.5 block font-grotesk text-[10px] uppercase tracking-[0.18em] text-white/40">Name</label>
-                  <input className={field} type="text" value={form.name} onChange={set('name')} placeholder="Your name" required />
-                </div>
-                <div>
-                  <label className="mb-1.5 block font-grotesk text-[10px] uppercase tracking-[0.18em] text-white/40">Email</label>
-                  <input className={field} type="email" value={form.email} onChange={set('email')} placeholder="you@email.com" required />
-                </div>
-              </div>
-              <div>
-                <label className="mb-1.5 block font-grotesk text-[10px] uppercase tracking-[0.18em] text-white/40">Message</label>
-                <textarea className={`${field} resize-none`} rows={4} value={form.message} onChange={set('message')} placeholder="What would you like to build?" required />
-              </div>
+          {status === 'success' ? (
+            <div className="relative flex min-h-[340px] flex-col items-center justify-center border border-[#3b82f6]/30 bg-[#070713] p-8 text-center">
+              <span className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#3b82f6] to-transparent" aria-hidden="true" />
+              <div className="grid h-14 w-14 place-items-center border border-[#3b82f6]/50 text-2xl text-[#60a5fa]">✓</div>
+              <h3 className="mt-5 font-grotesk text-xl font-semibold text-white">Transmission received</h3>
+              <p className="mt-2 max-w-xs font-plex text-sm leading-relaxed text-white/60">
+                Thanks for reaching out — I usually reply within a day.
+              </p>
+              <button
+                type="button"
+                onClick={() => setStatus('idle')}
+                className="mt-6 font-grotesk text-[11px] uppercase tracking-[0.18em] text-[#3b82f6] transition-colors hover:text-[#60a5fa]"
+              >
+                Send another →
+              </button>
             </div>
-            <button
-              type="submit"
-              className="group mt-5 inline-flex w-full items-center justify-center gap-2 bg-[#3b82f6] px-6 py-3 font-grotesk text-sm font-medium uppercase tracking-[0.16em] text-[#050510] transition-colors hover:bg-[#60a5fa]"
-            >
-              Send message
-              <span className="transition-transform group-hover:translate-x-1">→</span>
-            </button>
-            <p className="mt-3 font-plex text-[11px] text-white/35">Opens your mail app, pre-filled to {links.email}.</p>
-          </form>
+          ) : (
+            <form onSubmit={onSubmit} className="relative border border-white/10 bg-[#070713] p-6 sm:p-8">
+              {/* Honeypot for bots */}
+              <input
+                type="checkbox"
+                name="botcheck"
+                tabIndex={-1}
+                autoComplete="off"
+                className="hidden"
+                onChange={(e) => setForm((f) => ({ ...f, botcheck: e.target.checked }))}
+              />
+
+              <p className="font-grotesk text-[10px] uppercase tracking-[0.3em] text-white/40">Direct message</p>
+              <div className="mt-5 space-y-3">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <label className="mb-1.5 block font-grotesk text-[10px] uppercase tracking-[0.18em] text-white/40">Name</label>
+                    <input className={field} type="text" value={form.name} onChange={set('name')} placeholder="Your name" required />
+                  </div>
+                  <div>
+                    <label className="mb-1.5 block font-grotesk text-[10px] uppercase tracking-[0.18em] text-white/40">Email</label>
+                    <input className={field} type="email" value={form.email} onChange={set('email')} placeholder="you@email.com" required />
+                  </div>
+                </div>
+                <div>
+                  <label className="mb-1.5 block font-grotesk text-[10px] uppercase tracking-[0.18em] text-white/40">Message</label>
+                  <textarea className={`${field} resize-none`} rows={4} value={form.message} onChange={set('message')} placeholder="What would you like to build?" required />
+                </div>
+              </div>
+              <button
+                type="submit"
+                disabled={status === 'sending'}
+                className="group mt-5 inline-flex w-full items-center justify-center gap-2 bg-[#3b82f6] px-6 py-3 font-grotesk text-sm font-medium uppercase tracking-[0.16em] text-[#050510] transition-colors hover:bg-[#60a5fa] disabled:opacity-60"
+              >
+                {status === 'sending' ? 'Sending…' : 'Send message'}
+                {status !== 'sending' && <span className="transition-transform group-hover:translate-x-1">→</span>}
+              </button>
+              {status === 'error' ? (
+                <p className="mt-3 font-plex text-[11px] text-red-400">
+                  Something went wrong — please email me directly at {links.email}.
+                </p>
+              ) : (
+                <p className="mt-3 font-plex text-[11px] text-white/35">Sent straight to my inbox — I usually reply within a day.</p>
+              )}
+            </form>
+          )}
         </Reveal>
       </div>
 
