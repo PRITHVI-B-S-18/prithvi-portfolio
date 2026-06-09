@@ -31,7 +31,7 @@ export default function SpatialHero() {
         };
 
   return (
-    <section id="top" ref={ref} className="relative flex min-h-[100svh] items-center">
+    <section id="top" ref={ref} className="relative flex min-h-[100svh] items-start lg:items-center">
       {/* Blueprint alignment guides — draw themselves in like a drafting setup */}
       {!reduce && (
         <div className="pointer-events-none absolute inset-0 hidden lg:block" aria-hidden="true">
