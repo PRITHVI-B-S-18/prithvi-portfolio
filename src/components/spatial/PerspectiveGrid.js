@@ -1,20 +1,27 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
+import useIsDesktop from '@/lib/useIsDesktop';
 
 /**
- * Background layer (z:-1). A living spatial instrument backdrop over deep
- * space: a receding perspective grid, two slowly drifting ambient orbs for
- * atmospheric depth, a periodic radar scan sweep, pulsing coordinate markers,
- * and parallax depth particles. Pure CSS/SVG — no Three.js.
+ * Background layer (z:-1). A receding perspective grid over deep space.
+ *
+ * The expensive animated layers — large drifting blur orbs, the radar scan
+ * sweep, depth particles, and pulsing markers — run ONLY on desktop. Animated
+ * 100px+ blurs are very costly on mobile GPUs and caused jank, so mobile gets
+ * a lightweight static backdrop instead (dark base + one static glow + grid).
  */
 export default function PerspectiveGrid() {
   const reduce = useReducedMotion();
+  const { isDesktop, mounted } = useIsDesktop();
   const ref = useRef(null);
   const { scrollYProgress } = useScroll();
 
-  // Drift the grid texture as you scroll (disabled under reduced-motion).
-  const floorShift = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 220]);
-  const ceilShift = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -140]);
+  // Heavy animated decoration: desktop, mounted, motion allowed.
+  const rich = mounted && isDesktop && !reduce;
+
+  // Scroll-linked grid drift only when rich (avoids repaint cost on mobile).
+  const floorShift = useTransform(scrollYProgress, [0, 1], [0, rich ? 220 : 0]);
+  const ceilShift = useTransform(scrollYProgress, [0, 1], [0, rich ? -140 : 0]);
 
   const gridLines = {
     backgroundImage:
@@ -24,8 +31,8 @@ export default function PerspectiveGrid() {
 
   return (
     <div ref={ref} className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-[#050510]">
-      {/* Drifting ambient orbs — soft volume that slowly migrates for depth */}
-      {!reduce && (
+      {/* Drifting ambient orbs — desktop only (animated big blurs) */}
+      {rich && (
         <>
           <motion.div
             className="absolute h-[55vh] w-[55vh] rounded-full blur-[120px]"
@@ -42,11 +49,11 @@ export default function PerspectiveGrid() {
         </>
       )}
 
-      {/* Distant glow at the vanishing point — breathes slowly for living depth */}
+      {/* Vanishing-point glow — breathes on desktop, static (cheap) on mobile */}
       <motion.div
-        className="absolute left-1/2 top-1/2 h-[60vh] w-[60vh] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[120px]"
-        style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.12), transparent 70%)' }}
-        animate={reduce ? undefined : { scale: [1, 1.12, 1], opacity: [0.8, 1, 0.8] }}
+        className="absolute left-1/2 top-1/2 h-[55vh] w-[55vh] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[90px] md:blur-[120px]"
+        style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.13), transparent 70%)' }}
+        animate={rich ? { scale: [1, 1.12, 1], opacity: [0.8, 1, 0.8] } : undefined}
         transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
       />
 
@@ -78,9 +85,8 @@ export default function PerspectiveGrid() {
         />
       </div>
 
-      {/* Radar scan sweep — a soft beam with a crisp leading edge that
-          periodically descends, like an instrument scanning the structure */}
-      {!reduce && (
+      {/* Radar scan sweep — desktop only */}
+      {rich && (
         <motion.div
           className="absolute inset-x-0 h-48"
           style={{
@@ -101,15 +107,13 @@ export default function PerspectiveGrid() {
         style={{ background: 'radial-gradient(ellipse 90% 70% at 50% 50%, transparent 35%, #050510 88%)' }}
       />
 
-      {/* Pulsing coordinate crosshair markers — blueprint registration points */}
-      {!reduce && <CoordinateMarkers />}
-
-      {/* Depth particles — three parallax layers of faint dots */}
-      {!reduce && (
+      {/* Pulsing markers + depth particles — desktop only */}
+      {rich && <CoordinateMarkers />}
+      {rich && (
         <>
-          <ParticleLayer count={16} size={1} blur={0} opacity={0.5} duration={9} />
-          <ParticleLayer count={10} size={2} blur={1} opacity={0.32} duration={13} />
-          <ParticleLayer count={6} size={3} blur={2} opacity={0.2} duration={18} />
+          <ParticleLayer count={14} size={1} blur={0} opacity={0.5} duration={9} />
+          <ParticleLayer count={9} size={2} blur={1} opacity={0.32} duration={13} />
+          <ParticleLayer count={5} size={3} blur={2} opacity={0.2} duration={18} />
         </>
       )}
     </div>
