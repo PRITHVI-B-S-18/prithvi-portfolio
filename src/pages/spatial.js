@@ -5,6 +5,11 @@ import SpatialNav from '@/components/spatial/SpatialNav';
 import PerspectiveGrid from '@/components/spatial/PerspectiveGrid';
 import SpatialHero from '@/components/spatial/SpatialHero';
 
+// Client-only interface chrome — no SSR needed (they read window/pointer).
+const BootSequence = dynamic(() => import('@/components/spatial/BootSequence'), { ssr: false });
+const Cursor = dynamic(() => import('@/components/spatial/Cursor'), { ssr: false });
+const TelemetryHUD = dynamic(() => import('@/components/spatial/TelemetryHUD'), { ssr: false });
+
 // Below-fold sections are code-split so the initial bundle stays minimal.
 // ssr stays on so content is in the static HTML (SEO + no layout shift).
 const SpatialAbout = dynamic(() => import('@/components/spatial/SpatialAbout'));
@@ -44,6 +49,11 @@ export default function Spatial() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="theme-color" content="#050510" />
       </Head>
+
+      {/* Boot overlay + instrument chrome */}
+      <BootSequence />
+      <Cursor />
+      <TelemetryHUD />
 
       {/* Background layer (z:-1) */}
       <PerspectiveGrid />

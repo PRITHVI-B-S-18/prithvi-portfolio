@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { profile } from '@/content/profile';
 import { CornerTicks } from './Primitives';
+import MagneticButton from './MagneticButton';
 
 /**
  * Hero at z:0. Architectural title block beside a blueprint-framed portrait,
@@ -84,40 +85,52 @@ export default function SpatialHero() {
             <span>{location}</span>
           </motion.div>
 
-          <motion.h1
-            {...rise(0.08)}
+          <h1
             className="font-grotesk font-bold leading-[0.9] tracking-tight text-white"
             style={{ fontSize: 'clamp(2.8rem, 8vw, 6.5rem)' }}
+            aria-label={name}
           >
-            {name.split(' ').map((word, i) => (
-              <span key={word + i} className="mr-[0.16em] inline-block">
-                {word}
+            {name.split(' ').map((word, wi) => (
+              <span key={word + wi} className="mr-[0.16em] inline-block whitespace-nowrap" aria-hidden="true">
+                {word.split('').map((ch, ci) => (
+                  <motion.span
+                    key={ch + ci}
+                    className="inline-block"
+                    initial={reduce ? false : { opacity: 0, y: '0.5em', rotateX: -90 }}
+                    animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                    transition={{
+                      duration: 0.5,
+                      delay: reduce ? 0 : 0.25 + (wi * 4 + ci) * 0.04,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                  >
+                    {ch}
+                  </motion.span>
+                ))}
               </span>
             ))}
-          </motion.h1>
+          </h1>
 
           <motion.p {...rise(0.18)} className="mt-6 max-w-lg font-plex text-lg leading-relaxed text-white/70">
             {positioning}
           </motion.p>
 
           <motion.div {...rise(0.28)} className="mt-9 flex flex-wrap items-center gap-3">
-            <motion.a
+            <MagneticButton
+              as="a"
               href="#work"
-              whileHover={reduce ? {} : { scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
               className="group inline-flex items-center gap-2 bg-[#3b82f6] px-6 py-3 font-grotesk text-sm font-medium uppercase tracking-[0.16em] text-[#050510] transition-colors hover:bg-[#60a5fa]"
             >
               View work
               <span className="transition-transform group-hover:translate-x-1">→</span>
-            </motion.a>
-            <motion.a
+            </MagneticButton>
+            <MagneticButton
+              as="a"
               href="#contact"
-              whileHover={reduce ? {} : { scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
               className="inline-flex items-center gap-2 border border-white/15 px-6 py-3 font-grotesk text-sm font-medium uppercase tracking-[0.16em] text-white transition-colors hover:border-[#3b82f6] hover:text-[#3b82f6]"
             >
               Get in touch
-            </motion.a>
+            </MagneticButton>
           </motion.div>
 
           <motion.div {...rise(0.4)} className="relative mt-12 max-w-sm">
