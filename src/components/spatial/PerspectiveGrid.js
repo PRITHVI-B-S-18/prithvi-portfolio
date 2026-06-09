@@ -2,12 +2,10 @@ import { useRef } from 'react';
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 
 /**
- * Background layer (z:-1). Deep-space base with a hand-built perspective floor
- * grid that recedes to a vanishing point and fades at the edges, plus a few
- * CSS depth particles. Pure CSS/SVG — no Three.js, ~0KB added JS.
- *
- * Scroll-linked parallax drifts the grid lines so the page feels like moving
- * forward through space rather than scrolling a flat document.
+ * Background layer (z:-1). A living spatial instrument backdrop over deep
+ * space: a receding perspective grid, two slowly drifting ambient orbs for
+ * atmospheric depth, a periodic radar scan sweep, pulsing coordinate markers,
+ * and parallax depth particles. Pure CSS/SVG — no Three.js.
  */
 export default function PerspectiveGrid() {
   const reduce = useReducedMotion();
@@ -26,11 +24,29 @@ export default function PerspectiveGrid() {
 
   return (
     <div ref={ref} className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-[#050510]">
+      {/* Drifting ambient orbs — soft volume that slowly migrates for depth */}
+      {!reduce && (
+        <>
+          <motion.div
+            className="absolute h-[55vh] w-[55vh] rounded-full blur-[120px]"
+            style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.26), transparent 70%)', left: '6%', top: '8%' }}
+            animate={{ x: [0, 90, -50, 0], y: [0, 70, 30, 0], scale: [1, 1.18, 0.92, 1] }}
+            transition={{ duration: 26, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.div
+            className="absolute h-[48vh] w-[48vh] rounded-full blur-[110px]"
+            style={{ background: 'radial-gradient(circle, rgba(88,150,255,0.2), transparent 70%)', right: '4%', top: '38%' }}
+            animate={{ x: [0, -80, 40, 0], y: [0, -60, 20, 0], scale: [1, 0.88, 1.12, 1] }}
+            transition={{ duration: 32, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        </>
+      )}
+
       {/* Distant glow at the vanishing point — breathes slowly for living depth */}
       <motion.div
         className="absolute left-1/2 top-1/2 h-[60vh] w-[60vh] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[120px]"
-        style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.14), transparent 70%)' }}
-        animate={reduce ? undefined : { scale: [1, 1.12, 1], opacity: [0.85, 1, 0.85] }}
+        style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.12), transparent 70%)' }}
+        animate={reduce ? undefined : { scale: [1, 1.12, 1], opacity: [0.8, 1, 0.8] }}
         transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
       />
 
@@ -62,16 +78,36 @@ export default function PerspectiveGrid() {
         />
       </div>
 
+      {/* Radar scan sweep — a soft beam with a crisp leading edge that
+          periodically descends, like an instrument scanning the structure */}
+      {!reduce && (
+        <motion.div
+          className="absolute inset-x-0 h-48"
+          style={{
+            background:
+              'linear-gradient(to bottom, transparent, rgba(59,130,246,0.10) 55%, rgba(96,165,250,0.28) 90%, rgba(96,165,250,0.55) 100%)',
+            borderBottom: '1.5px solid rgba(120,180,255,0.7)',
+            boxShadow: '0 2px 18px rgba(96,165,250,0.4)',
+          }}
+          initial={{ top: '-15%' }}
+          animate={{ top: ['-15%', '115%'] }}
+          transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut', repeatDelay: 2.5 }}
+        />
+      )}
+
       {/* Edge vignette so the grid fades to the sides as well */}
       <div
         className="absolute inset-0"
         style={{ background: 'radial-gradient(ellipse 90% 70% at 50% 50%, transparent 35%, #050510 88%)' }}
       />
 
+      {/* Pulsing coordinate crosshair markers — blueprint registration points */}
+      {!reduce && <CoordinateMarkers />}
+
       {/* Depth particles — three parallax layers of faint dots */}
       {!reduce && (
         <>
-          <ParticleLayer count={14} size={1} blur={0} opacity={0.5} duration={9} />
+          <ParticleLayer count={16} size={1} blur={0} opacity={0.5} duration={9} />
           <ParticleLayer count={10} size={2} blur={1} opacity={0.32} duration={13} />
           <ParticleLayer count={6} size={3} blur={2} opacity={0.2} duration={18} />
         </>
@@ -86,6 +122,35 @@ export default function PerspectiveGrid() {
 function spread(i, n, salt) {
   const v = Math.sin((i + 1) * salt) * 10000;
   return Number((Math.abs(v - Math.floor(v)) * n).toFixed(3));
+}
+
+// A handful of small crosshair marks that fade/pulse in place, like the
+// registration ticks on a technical drawing coming to life.
+const MARKERS = [
+  { left: 14, top: 22 },
+  { left: 82, top: 18 },
+  { left: 68, top: 64 },
+  { left: 24, top: 74 },
+  { left: 90, top: 50 },
+];
+
+function CoordinateMarkers() {
+  return (
+    <>
+      {MARKERS.map((m, i) => (
+        <motion.div
+          key={i}
+          className="absolute"
+          style={{ left: `${m.left}%`, top: `${m.top}%` }}
+          animate={{ opacity: [0.12, 0.4, 0.12], scale: [0.85, 1, 0.85] }}
+          transition={{ duration: 4 + i, delay: i * 0.8, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <span className="absolute left-1/2 top-1/2 h-3 w-px -translate-x-1/2 -translate-y-1/2 bg-[#3b82f6]/60" />
+          <span className="absolute left-1/2 top-1/2 h-px w-3 -translate-x-1/2 -translate-y-1/2 bg-[#3b82f6]/60" />
+        </motion.div>
+      ))}
+    </>
+  );
 }
 
 function ParticleLayer({ count, size, blur, opacity, duration }) {
