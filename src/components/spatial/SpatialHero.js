@@ -180,11 +180,6 @@ export default function SpatialHero() {
                 }}
                 aria-hidden="true"
               />
-              {/* bottom data strip */}
-              <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-[#050510] to-transparent px-3 pb-2.5 pt-8 font-grotesk text-[9px] uppercase tracking-[0.22em] text-white/55">
-                <span>Fig. 01</span>
-                <span className="text-[#3b82f6]">{location}</span>
-              </div>
             </div>
           </div>
         </motion.div>

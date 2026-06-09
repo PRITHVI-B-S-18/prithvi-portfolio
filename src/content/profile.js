@@ -9,7 +9,7 @@ export const profile = {
     since: 'Feb 2026',
   },
   available: true,
-  location: 'India',
+  location: 'Coimbatore',
   resume: '/Resume.pdf',
   portrait: '/images/profile/portrait-1.jpg',
   portraitAlt: '/images/profile/portrait-3.jpg',

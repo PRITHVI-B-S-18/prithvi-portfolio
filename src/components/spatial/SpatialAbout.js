@@ -13,7 +13,7 @@ export default function SpatialAbout() {
   const specs = [
     { k: 'Role', v: currentRole.title },
     { k: 'Org', v: `${currentRole.org} · ${currentRole.team}` },
-    { k: 'Education', v: education.degree },
+    { k: 'Education', v: education.school },
     { k: 'Based', v: location },
   ];
 
