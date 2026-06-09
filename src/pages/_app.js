@@ -1,6 +1,7 @@
 import '@/styles/globals.css';
 import { useEffect } from 'react';
 import localFont from 'next/font/local';
+import { Cormorant_Garamond, DM_Sans } from 'next/font/google';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import ScrollProgress from '@/components/ui/ScrollProgress';
@@ -21,6 +22,22 @@ const geistMono = localFont({
   display: 'swap',
 });
 
+// Risograph/indie-print type system: Cormorant Garamond (humanist display) +
+// DM Sans (body). Consumed by the /riso route via font-display / font-body.
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['500', '600', '700'],
+  variable: '--font-cormorant',
+  display: 'swap',
+});
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-dm-sans',
+  display: 'swap',
+});
+
 export default function App({ Component, pageProps }) {
   const router = useRouter();
 
@@ -33,8 +50,9 @@ export default function App({ Component, pageProps }) {
   }, []);
 
   return (
-    <div className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
-      <ScrollProgress />
+    <div className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} ${dmSans.variable} font-sans`}>
+      {/* The editorial scroll bar would clash with the print aesthetic. */}
+      {router.pathname !== '/riso' && <ScrollProgress />}
       {/* Enter-only fade keyed by route. No exit animation, so navigating away
           replaces the page instantly (avoids the old page flashing at the top). */}
       <motion.div

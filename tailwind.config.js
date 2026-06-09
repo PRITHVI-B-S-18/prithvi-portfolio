@@ -14,10 +14,17 @@ module.exports = {
         line: 'rgb(var(--line) / <alpha-value>)',
         accent: 'rgb(var(--accent) / <alpha-value>)',
         accent2: 'rgb(var(--accent-2) / <alpha-value>)',
+        // Risograph duotone palette (/riso route)
+        paper: '#fff8f0',
+        coral: '#ff6b5b',
+        teal: '#2ec4b6',
+        inkdark: '#1a1210',
       },
       fontFamily: {
         sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
         mono: ['var(--font-geist-mono)', 'ui-monospace', 'monospace'],
+        display: ['var(--font-cormorant)', 'Georgia', 'serif'],
+        body: ['var(--font-dm-sans)', 'system-ui', 'sans-serif'],
       },
       keyframes: {
         'scroll-bounce': {
