@@ -51,7 +51,7 @@ export default function SpatialSkills() {
   const view = { once: true, margin: '-80px' };
 
   return (
-    <PerspectiveSection id="skills" className="mx-auto max-w-6xl px-6 py-16 md:py-28" lift={8}>
+    <PerspectiveSection id="skills" className="mx-auto max-w-6xl px-6 pb-20 pt-10 md:pb-28 md:pt-14" lift={8}>
       <SectionMarker index="03" label="Skills — Capability Radar" />
 
       <div className="mt-12 grid items-center gap-12 lg:grid-cols-[440px_1fr]">

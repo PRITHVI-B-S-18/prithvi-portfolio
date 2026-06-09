@@ -29,7 +29,7 @@ export default function SpatialContact() {
     'w-full border border-white/12 bg-white/[0.02] px-3 py-2.5 font-plex text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-[#3b82f6]';
 
   return (
-    <PerspectiveSection id="contact" className="mx-auto max-w-6xl px-6 pb-10 pt-16 md:pt-28" lift={6}>
+    <PerspectiveSection id="contact" className="mx-auto max-w-6xl px-6 pb-10 pt-10 md:pt-14" lift={6}>
       <SectionMarker index="05" label="Contact" />
 
       <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-14">

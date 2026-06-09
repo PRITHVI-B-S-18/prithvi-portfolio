@@ -219,7 +219,7 @@ export default function SpatialExperience() {
   const useHorizontal = mounted && isDesktop;
 
   return (
-    <PerspectiveSection id="experience" className="mx-auto max-w-6xl px-6 py-16 md:py-28" lift={8}>
+    <PerspectiveSection id="experience" className="mx-auto max-w-6xl px-6 pb-20 pt-10 md:pb-28 md:pt-14" lift={8}>
       <SectionMarker index="02" label="Experience — Section Drawing" />
 
       {useHorizontal ? (

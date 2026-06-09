@@ -18,7 +18,7 @@ export default function SpatialAbout() {
   ];
 
   return (
-    <PerspectiveSection id="about" className="mx-auto max-w-6xl px-6 py-16 md:py-28">
+    <PerspectiveSection id="about" className="mx-auto max-w-6xl px-6 pb-20 pt-10 md:pb-28 md:pt-14">
       <SectionMarker index="01" label="About" />
 
       <div className="mt-10 grid gap-8 lg:grid-cols-[1.3fr_1fr] lg:gap-10">

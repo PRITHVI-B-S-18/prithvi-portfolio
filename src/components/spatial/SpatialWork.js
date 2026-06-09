@@ -202,7 +202,7 @@ export default function SpatialWork() {
   const [selected, setSelected] = useState(null);
 
   return (
-    <PerspectiveSection id="work" className="mx-auto max-w-6xl px-6 py-16 md:py-28" lift={8}>
+    <PerspectiveSection id="work" className="mx-auto max-w-6xl px-6 pb-20 pt-10 md:pb-28 md:pt-14" lift={8}>
       <SectionMarker index="04" label="Selected Work" />
       <Stagger className="mt-10 grid gap-px border border-white/10 bg-white/5 sm:grid-cols-2">
         {featured.map((p, i) => (

@@ -32,8 +32,9 @@ export default function PerspectiveSection({ id, children, className = '', lift 
   const y = useTransform(progress, [0, 1], [40, 0]);
   const opacity = useTransform(progress, [0, 1], [0, 1]);
 
-  // scroll-mt clears the fixed header so anchor jumps land below it, not under it.
-  const cls = `scroll-mt-24 ${className}`;
+  // scroll-mt clears the fixed header (~64px) so anchor jumps land just below
+  // it. Kept tight so the section padding alone provides the breathing gap.
+  const cls = `scroll-mt-16 ${className}`;
 
   // SSR / first paint / reduced-motion: render flat and fully visible.
   if (!mounted || reduce) {
