@@ -22,6 +22,13 @@ const SpatialContact = dynamic(() => import('@/components/spatial/SpatialContact
  * `/spatial` so the route is stable while the design lives at the root.
  */
 export default function SpatialPage() {
+  // Spatial is dark-only (no theme toggle). Client-side navigation doesn't re-run
+  // the pre-paint theme script, so ensure the dark class is present on mount even
+  // if a stored 'light' preference (e.g. from the /work theme toggle) is active.
+  useEffect(() => {
+    document.documentElement.classList.add('dark');
+  }, []);
+
   // Deep-link support: when arriving with a hash (e.g. /#work), scroll to that
   // section once the page has laid out. scroll-mt clears the fixed header.
   useEffect(() => {

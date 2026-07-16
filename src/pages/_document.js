@@ -1,7 +1,11 @@
 import { Html, Head, Main, NextScript } from 'next/document';
 
 // Set the theme class before first paint to avoid a flash. Defaults to dark.
-const themeScript = `(function(){try{var t=localStorage.getItem('theme');if(!t||t==='dark'){document.documentElement.classList.add('dark');}}catch(e){document.documentElement.classList.add('dark');}})();`;
+// The spatial routes ('/' and '/spatial') are dark-only by design — they have no
+// theme toggle — so force dark there regardless of any stored 'light' preference
+// (localStorage is shared across branches/routes on the same origin, and the
+// editorial /work pages' toggle can persist theme=light). Other routes honor it.
+const themeScript = `(function(){try{var p=location.pathname.replace(/\\/$/,'')||'/';var spatial=(p==='/'||p==='/spatial');var t=localStorage.getItem('theme');if(spatial||!t||t==='dark'){document.documentElement.classList.add('dark');}}catch(e){document.documentElement.classList.add('dark');}})();`;
 
 export default function Document() {
   return (

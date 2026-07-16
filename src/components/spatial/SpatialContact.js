@@ -61,7 +61,7 @@ export default function SpatialContact() {
     { label: 'Email', value: links.email, href: `mailto:${links.email}`, Icon: MailIcon, mark: '↗' },
     { label: 'GitHub', value: links.githubLabel, href: links.github, Icon: GitHubIcon, mark: '↗' },
     { label: 'LinkedIn', value: links.linkedinLabel, href: links.linkedin, Icon: LinkedInIcon, mark: '↗' },
-    { label: 'Résumé', value: 'Download PDF', href: resume, Icon: null, mark: '↓' },
+    { label: 'Résumé', value: 'Download PDF', href: resume, Icon: null, mark: '↓', download: 'Prithvi-B-S-Resume.pdf' },
   ];
 
   const field =
@@ -83,11 +83,13 @@ export default function SpatialContact() {
           </p>
 
           <div className="mt-8 grid gap-px border border-white/10 bg-white/5">
-            {channels.map(({ label, value, href, Icon, mark }) => (
+            {channels.map(({ label, value, href, Icon, mark, download }) => (
               <a
                 key={label}
                 href={href}
-                target={href.startsWith('mailto') ? undefined : '_blank'}
+                // Résumé downloads (same-origin file); others open in a new tab.
+                download={download || undefined}
+                target={download || href.startsWith('mailto') ? undefined : '_blank'}
                 rel="noopener noreferrer"
                 className="group flex items-center justify-between gap-4 bg-[#070713] px-5 py-3.5 transition-colors hover:bg-[#3b82f6]/[0.06]"
               >
