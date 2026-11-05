@@ -28,15 +28,15 @@ export const profile = {
     heading: 'I build for the day it breaks.',
     body: [
       "I'm a software engineer drawn to systems that have to survive real use. I build secure desktop apps, internal tools that teams genuinely adopt, and automation that removes manual work without anyone noticing. I care more about the failure modes than the happy path.",
-      "Today I work on the Neo Browser team at iamneo, building a cross-platform secure exam browser. My work spans telemetry, network controls, behavior detection, and the kind of cross-OS hardening you only notice once it stops working.",
+      "Today I work on the Neo Browser team at iamneo, building a cross-platform secure exam browser. My work spans native C++ anti-cheat, tamper and VM detection, network controls, cloud security, and the kind of cross-OS hardening you only notice once it stops working.",
       "Before this I shipped a run of internal products end to end, from AI evaluation systems and analytics dashboards to scheduling platforms and self-service tools. I grew from a program-management trainee into the engineer who now owns them.",
     ],
   },
   stats: [
-    { value: 9, suffix: '+', label: 'Production systems shipped', animate: true },
-    { value: 70, suffix: '%', label: 'Manual work removed', animate: true },
-    { value: 40, suffix: '%', label: 'Operational efficiency gained', animate: true },
+    { value: 6, suffix: '', label: 'Production releases shipped', animate: true },
+    { value: 8, suffix: '', label: 'Internal tools built', animate: true },
     { value: 3, suffix: '', label: 'Desktop platforms shipped', animate: true },
+    { value: 0, suffix: '', label: 'Anti-cheat false positives', animate: false },
   ],
   principles: [
     {

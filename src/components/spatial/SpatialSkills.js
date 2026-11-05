@@ -7,12 +7,12 @@ import { SectionMarker } from './Primitives';
 // Six axes (clean hexagon) mapped from the skill groups. `level` reflects
 // relative depth/breadth and can be tuned freely.
 const AXES = [
-  { key: 'LANGUAGES', level: 0.92, items: ['Python', 'JavaScript', 'TypeScript', 'C++', 'SQL'] },
-  { key: 'FRONTEND', level: 0.95, items: ['React', 'Next.js', 'Vite', 'Tailwind CSS', 'Streamlit'] },
-  { key: 'AI / ML', level: 0.82, items: ['Azure OpenAI', 'GPT-4o', 'LLMs', 'GenAI', 'MTCNN'] },
-  { key: 'BACKEND', level: 0.86, items: ['FastAPI', 'Flask', 'Django', 'Node.js', 'Electron'] },
-  { key: 'CLOUD / DATA', level: 0.8, items: ['Azure', 'Firebase', 'AWS', 'Docker', 'PostgreSQL', 'Supabase'] },
-  { key: 'AUTOMATION', level: 0.9, items: ['n8n', 'Selenium', 'Git', 'Cursor', 'Claude Code'] },
+  { key: 'LANGUAGES', level: 0.92, items: ['JavaScript', 'TypeScript', 'Python', 'C++', 'SQL', 'Bash'] },
+  { key: 'FRONTEND', level: 0.93, items: ['React', 'Next.js', 'Angular', 'Vite', 'Tailwind CSS'] },
+  { key: 'AI / ML', level: 0.82, items: ['Azure OpenAI', 'GPT-4o', 'LLMs', 'MCP', 'n8n'] },
+  { key: 'BACKEND', level: 0.9, items: ['Node.js', 'Electron', 'C++ (Node-API)', 'FastAPI', 'Flask'] },
+  { key: 'CLOUD / DATA', level: 0.84, items: ['AWS (S3, CloudFront)', 'GCP Cloud Run', 'Firebase', 'Docker', 'PostgreSQL', 'ClickHouse'] },
+  { key: 'SECURITY', level: 0.88, items: ['Anti-tamper & hook detection', 'VM detection', 'Code signing', 'JWT / OIDC auth', 'SQL-injection hardening'] },
 ];
 
 // Qualitative proficiency tier — meaningful categorisation instead of a
